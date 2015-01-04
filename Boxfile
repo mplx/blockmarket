@@ -1,0 +1,33 @@
+################################################
+## GLOBAL SETTINGS
+################################################
+global:
+  env:
+    - APP_NAME: blockmarket
+################################################
+## DATABASE SETTINGS
+################################################
+db1:
+  name: blockmarketdb
+  type: mysql
+################################################
+## APP SETTINGS
+################################################
+web1:
+  name: blockmarket
+  document_root: /
+  php_version: 5.3.10
+  php_extensions:
+    - curl
+    - pdo_mysql
+    - zip
+  after_build:
+    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install"
+  before_deploy:
+    - "php bin/migrate.php"
+    - "php bin/update-data.php"
+  after_deploy:
+  cron:
+    - "1,16,31,46 * * * *": "php bin/update-data.php"
+  php_short_open_tag: "0"
+  magic_quotes_gpc: Off
