@@ -44,16 +44,8 @@ class Router
 
     public function run()
     {
-        if (isset($_GET['module'])) {
-            $module = $_GET['module'];
-        } else {
-            $module = $this->default_module;
-        }
-        if (isset($_GET['action'])) {
-            $action = $_GET['action'];
-        } else {
-            $action = null;
-        }
+        $module = bm_GET('module', $this->default_module);
+        $action = bm_GET('action', null);
 
         $controller = $this->getController($module);
         $response = $controller->initialize($action);

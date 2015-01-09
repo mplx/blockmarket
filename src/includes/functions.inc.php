@@ -6,6 +6,33 @@
  * @package     blockmarket
  **/
 
+ function bm_COOKIE($key, $alt = false)
+ {
+    if (isset($_COOKIE[$key])) {
+        return $_COOKIE[$key];
+    } else {
+        return $alt;
+    }
+ }
+
+ function bm_GET($key, $alt = false)
+ {
+    if (isset($_GET[$key])) {
+        return $_GET[$key];
+    } else {
+        return $alt;
+    }
+}
+
+function bm_POST($key, $alt = false)
+{
+    if (isset($_POST[$key])) {
+        return $_POST[$key];
+    } else {
+        return $alt;
+    }
+}
+
 function bm_curl_get($url, $header = false, $body = true, $timeout = null, $useragent = null)
 {
     $timeout = $timeout == null ? BM_CURL_TIMEOUT : intval($timeout);

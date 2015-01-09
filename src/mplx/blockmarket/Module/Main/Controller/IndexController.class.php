@@ -43,9 +43,9 @@ class IndexController extends AbstractMainController
             $data['basic'] = $temp[0];
         }
 
-        if (isset($_COOKIE['favorites'])) {
+        if (bm_COOKIE('favorites')) {
             $query = '';
-            $result = preg_match_all('/([0-9]+)/', $_COOKIE['favorites'], $lookup);
+            $result = preg_match_all('/([0-9]+)/', bm_COOKIE('favorites'), $lookup);
             if (is_array($lookup) && count($lookup[0])<=5) {
                 $lookup = array_unique($lookup[0]);
                 foreach ($lookup as $fav) {
