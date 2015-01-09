@@ -12,5 +12,11 @@ try {
     $router = new mplx\blockmarket\Router();
     $router->run();
 } catch (\Exception $e) {
-    echo "The server made a boo boo...";
+    if (BM_DEBUG) {
+        echo "<h1>The server made a boo boo...</h1>";
+        echo "<h2>Debug Mode</h2>";
+        echo $e->getMessage();
+    } else {
+        echo "The server made a boo boo...";
+    }
 }
