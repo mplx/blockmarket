@@ -8,5 +8,10 @@
 
 require_once 'src/bootstrap.php';
 
-$router = new mplx\blockmarket\Router();
-$router->run();
+try {
+    $router = new mplx\blockmarket\Router();
+    $router->run();
+} catch (\Exception $e) {
+    echo "The server made a boo boo...";
+}
+
