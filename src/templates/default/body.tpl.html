@@ -43,9 +43,8 @@
             <div id="receips">
                 <h1>Black Market</h1>
                 {% if data.config.timezone is defined %}
-                    <canvas id="clockid" class="CoolClock:classic:85:true:{{ data.config.timezone.gmtdiffhours }}"></canvas><br />
-                    {{ data.config.timezone.zone }}<br />
-                    GMT{{ data.config.timezone.gmtdiff }}
+                    <canvas id="clockid" class="CoolClock:classic:88:true:{{ data.config.timezone.gmtdiffhours }}"></canvas><br />
+                    {{ data.config.timezone.zone }} (GMT{{ data.config.timezone.gmtdiff }})
                 {% endif %}
                 {% block blreceips %}{% endblock %}</div>
             </div>
