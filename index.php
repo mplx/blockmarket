@@ -14,4 +14,3 @@ try {
 } catch (\Exception $e) {
     echo "The server made a boo boo...";
 }
-

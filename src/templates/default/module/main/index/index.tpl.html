@@ -12,10 +12,7 @@
                 rangeSelector: { enabled: false },
                 series: [{
                     name: '{{ data.basic.title}}',
-                    data: [{% for item in data.twentyfour %}
-                                [{{ item.tstamp }},{{ item.marketvalue }}]
-                                {% if loop.last == false %},{% endif %}
-                           {% endfor %}],
+                    data: [{% for item in data.twentyfour %}[{{ item.tstamp }},{{ item.marketvalue }}]{% if loop.last == false %},{% endif %}{% endfor %}],
                     tooltip: { valueDecimals: 4 }
                 }]
             });
@@ -63,7 +60,14 @@
 
     <h2>Trends</h2>
 
-    <h2>Favorites</h2>
+    {% if data.favorites is defined %}
+        <h2>Favorites</h2>
+        <ul>
+        {% for item in data.favorites %}
+            <li><a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 
     <h2>List</h2>
     <ol>
@@ -84,6 +88,8 @@
             {% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}
         </span>
     </h1>
+
+    <p><a href="#" onclick="javascript:addStockID({{ data.basic.id_stock }});">Add to favorites</a></p>
 
     <h2>24 hours</h2>
     <div id="twentyfour"></div>
