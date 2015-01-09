@@ -43,6 +43,24 @@ class IndexController extends AbstractMainController
             $data['basic'] = $temp[0];
         }
 
+        if (isset($_COOKIE['favorites'])) {
+            $query = '';
+            $result = preg_match_all('/([0-9]+)/', $_COOKIE['favorites'], $lookup);
+            if (is_array($lookup) && count($lookup[0])<=5) {
+                $lookup = array_unique($lookup[0]);
+                foreach ($lookup as $fav) {
+                    if (is_numeric($fav)) {
+                        if ($query != '') {
+                            $query .= " OR ";
+                        }
+                        $query .= "id_stock = " . $fav;
+                    }
+                }
+                $query = "SELECT id_stock, title FROM stocks WHERE " . $query . " ORDER BY title ASC";
+                $data['favorites'] = $this->db->query($query);;
+            }
+        }
+
         $query = sprintf("SELECT marketvalue, UNIX_TIMESTAMP(ts)*1000 AS tstamp FROM prices WHERE stock_id = %d ORDER BY ts DESC LIMIT 0,100", $id);
         $temp = $this->db->query($query);
         $data['hundret'] = array_reverse($temp);
