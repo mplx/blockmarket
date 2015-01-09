@@ -43,6 +43,10 @@ class IndexController extends AbstractMainController
             $data['basic'] = $temp[0];
         }
 
+        $data['config']['timezone']['zone'] = date("e");
+        $data['config']['timezone']['gmtdiff'] = date("O");
+        $data['config']['timezone']['gmtdiffhours'] = substr($data['config']['timezone']['gmtdiff'], 0, 3);
+
         if (bm_COOKIE('favorites')) {
             $query = '';
             $result = preg_match_all('/([0-9]+)/', bm_COOKIE('favorites'), $lookup);

@@ -56,8 +56,6 @@
 {% endblock %}
 
 {% block blitems %}
-    <h1>Items</h1>
-
     <h2>Trends</h2>
 
     {% if data.favorites is defined %}
@@ -69,7 +67,7 @@
         </ul>
     {% endif %}
 
-    <h2>List</h2>
+    <h2>Items</h2>
     <ol>
         {% for item in stocks %}
             <li><a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a></li>
@@ -78,7 +76,7 @@
 {% endblock %}
 
 {% block blreceips %}
-    <h1>Receips</h1>
+    <h2>Receipes</h2>
 {% endblock %}
 
 {% block blcharts %}
