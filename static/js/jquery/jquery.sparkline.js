@@ -353,6 +353,9 @@
 
     // You can have tooltips use a css class other than jqstooltip by specifying tooltipClassname
     defaultStyles = '.jqstooltip { ' +
+            'padding: 5px 5px 15px 5px;' +
+            'min-height: 30px;' +
+            'min-width: 30px;' +
             'position: absolute;' +
             'left: 0px;' +
             'top: 0px;' +
@@ -866,7 +869,7 @@
 
         getSize: function (content) {
             this.sizetip.html(content).appendTo(this.container);
-            this.width = this.sizetip.width() + 1;
+            this.width = this.sizetip.width() + 12;
             this.height = this.sizetip.height();
             this.sizetip.remove();
         },
