@@ -10,32 +10,20 @@
                 navigator: { enabled : false },
                 scrollbar: { enabled : false },
                 rangeSelector: { enabled: false },
-                chart: {
-                    height: 300
-                },
+                chart: { height: 300 },
+                yAxis: { title: { text: 'Gold Coins' }, opposite: false },
                 series: [{
                     name: '{{ data.basic.title}}',
                     data: [{% for item in data.twentyfour %}[{{ item.tstamp }},{{ item.marketvalue }}]{% if loop.last == false %},{% endif %}{% endfor %}],
-                    tooltip: { valueDecimals: 4 }
+                    tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' }
                 }]
             });
 
             $('#month').highcharts({
-                title: {
-                    text: '{{ data.basic.title}}',
-                },
-                tooltip: {
-                    valueDecimals: 4,
-                    valueSuffix: ' Gold'
-                },
-                chart: {
-                    height: 300
-                },
-                yAxis: {
-                    title: {
-                        text: 'Gold'
-                    },
-                },
+                title: { text: '{{ data.basic.title}}', },
+                tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' },
+                chart: { height: 300 },
+                yAxis: { title: { text: 'Gold Coins' }, },
                 xAxis: {
                     categories: [{% for item in data.month %}'{{ item.bmdate }}'{% if loop.last == false %},{% endif %}{% endfor %}]
                 },
@@ -73,7 +61,7 @@
         </ul>
     {% endif %}
 
-    <h2>Items</h2>
+    <h2>Trade Portal</h2>
     <ol>
         {% for item in stocks %}
             <li><a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a></li>
@@ -99,7 +87,7 @@
         </script>
     </p>
 
-    <h2>24 hours</h2>
+    <h2>24 Hours</h2>
     <div id="twentyfour"></div>
 
     <h2>Month</h2>
