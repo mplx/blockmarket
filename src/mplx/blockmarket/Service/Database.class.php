@@ -178,4 +178,16 @@ class Database
         $result = $this->query();
         return $result[0]['value'];
     }
+
+    public function getStocks($id = null)
+    {
+        if ($id) {
+            $query = sprintf("SELECT id_stock, title FROM stocks WHERE id_stock = %d ORDER BY title ASC", $id);
+        } else {
+            $query = "SELECT id_stock, title FROM stocks ORDER BY title ASC";
+        }
+
+        return $this->query($query);
+    }
+
 }
