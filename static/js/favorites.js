@@ -1,6 +1,39 @@
-function addStockID(id) {
-    console.log(id);;
+function writeAddRemove(id) {
+    try {
+        var json_str = getCookie('favorites');
+        var arr = JSON.parse(json_str);
+    } catch (e) {
+        arr = [];
+    }
 
+    console.log(arr);
+    console.log(id);
+    console.log(arr.indexOf(id));
+    if (arr.indexOf(id) >= 0) {
+        document.write('<a href="#" onclick="javascript:remStockID('+id+'); window.location.reload();">Remove from favorites</a>');
+    } else {
+        document.write('<a href="#" onclick="javascript:addStockID('+id+'); window.location.reload();">Add to favorites</a>');
+    }
+}
+
+function remStockID(id) {
+    try {
+        var json_str = getCookie('favorites');
+        var arr = JSON.parse(json_str);
+    } catch (e) {
+        arr = [];
+    }
+
+    index = arr.indexOf(id);
+    if (index >= 0) {
+        arr.splice(index, 1);
+    }
+
+    var json_str = JSON.stringify(arr);
+    setCookie('favorites', json_str);
+}
+
+function addStockID(id) {
     try {
         var json_str = getCookie('favorites');
         var arr = JSON.parse(json_str);

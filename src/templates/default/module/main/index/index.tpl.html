@@ -87,7 +87,11 @@
         </span>
     </h1>
 
-    <p><a href="#" onclick="javascript:addStockID({{ data.basic.id_stock }});">Add to favorites</a></p>
+    <p>
+        <script>
+            writeAddRemove({{ data.basic.id_stock }});
+        </script>
+    </p>
 
     <h2>24 hours</h2>
     <div id="twentyfour"></div>
