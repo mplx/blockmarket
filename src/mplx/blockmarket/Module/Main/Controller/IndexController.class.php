@@ -73,9 +73,13 @@ class IndexController extends AbstractMainController
         $temp = $this->db->query($query);
         $data['twentyfour'] = $temp;
         $data['current']['marketvalue'] = $data['twentyfour'][count($data['twentyfour'])-1]['marketvalue'];
-        $data['current']['platinumcoins'] = floor($data['current']['marketvalue'] / 100);
-        $data['current']['goldcoins'] = floor($data['current']['marketvalue'] - $data['current']['platinumcoins'] * 100);
-        $data['current']['coppercoins'] = round(($data['current']['marketvalue'] - $data['current']['platinumcoins'] * 100 - $data['current']['goldcoins']) * 100);
+        $units = 1;
+        if ($data['current']['marketvalue']<=0.000999) { $units = 100; }
+        elseif ($data['current']['marketvalue']<=0.009999) { $units = 100; }
+        $data['current']['units'] = $units;
+        $data['current']['platinumcoins'] = floor($data['current']['marketvalue'] * $units / 100);
+        $data['current']['goldcoins'] = floor($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100);
+        $data['current']['coppercoins'] = round(($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100 - $data['current']['goldcoins']) * 100);
 
         $query = "SELECT MAX(marketvalue) AS pricemax, MIN(marketvalue) AS pricemin, AVG(marketvalue) AS priceavg, date(ts) AS bmdate, UNIX_TIMESTAMP(date(ts))*1000 AS tstamp " .
                 "FROM prices " .

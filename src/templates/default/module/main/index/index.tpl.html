@@ -10,7 +10,7 @@
                 navigator: { enabled : false },
                 scrollbar: { enabled : false },
                 rangeSelector: { enabled: false },
-                chart: { height: 300 },
+                chart: { height: 340 },
                 yAxis: { title: { text: 'Gold Coins' }, opposite: false },
                 series: [{
                     name: '{{ data.basic.title}}',
@@ -22,7 +22,7 @@
             $('#month').highcharts({
                 title: { text: '{{ data.basic.title}}', },
                 tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' },
-                chart: { height: 320 },
+                chart: { height: 340 },
                 yAxis: { title: { text: 'Gold Coins' }, },
                 xAxis: {
                     categories: [{% for item in data.month %}'{{ item.bmdate }}'{% if loop.last == false %},{% endif %}{% endfor %}]
@@ -89,11 +89,9 @@
         {{ data.current.platinumcoins}} Platinum
         {{ data.current.goldcoins}} Gold
         {{ data.current.coppercoins}} Copper
+        {% if data.current.units > 1 %}({{ data.current.units }} Units){% endif %}
     </p>
 
-    <h2>24 Hours</h2>
     <div id="twentyfour"></div>
-
-    <h2>Month</h2>
     <div id="month"></div>
 {% endblock %}
