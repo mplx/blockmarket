@@ -14,11 +14,13 @@ class Router
 {
     protected $map = array();
     protected $services = array();
+    public $default_module;
 
     public function __construct()
     {
         global $db;
 
+        $this->default_module = 'index';
         $this->services['db'] = $db;
 
         $loader = new \Twig_Loader_Filesystem(BM_PATH_TPL . BM_THEME);
@@ -42,8 +44,18 @@ class Router
 
     public function run()
     {
-        $controller = $this->getController('index');
-        $action = null;
+        if (isset($_GET['module'])) {
+            $module = $_GET['module'];
+        } else {
+            $module = $this->default_module;
+        }
+        if (isset($_GET['action'])) {
+            $action = $_GET['action'];
+        } else {
+            $action = null;
+        }
+
+        $controller = $this->getController($module);
         $response = $controller->initialize($action);
         if (!($response instanceof Response)) {
             throw new \LogicException('Controller did not return a Response object.');

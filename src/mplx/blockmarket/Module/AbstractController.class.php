@@ -28,7 +28,6 @@ abstract class AbstractController implements ControllerInterface
 
     public function initialize($action = null)
     {
-        $action = 'index';
         if (!in_array($action, $this->actions) || !($result = $this->initializeAction($action))) {
             $result = $this->initializeAction($this->action_default);
         }
