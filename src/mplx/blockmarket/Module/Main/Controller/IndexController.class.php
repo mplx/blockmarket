@@ -72,6 +72,10 @@ class IndexController extends AbstractMainController
         $query = sprintf("SELECT marketvalue, UNIX_TIMESTAMP(ts)*1000 AS tstamp FROM prices WHERE stock_id = %d AND ts >= DATE_SUB(NOW(), INTERVAL 1 DAY)", $id);
         $temp = $this->db->query($query);
         $data['twentyfour'] = $temp;
+        $data['current']['marketvalue'] = $data['twentyfour'][count($data['twentyfour'])-1]['marketvalue'];
+        $data['current']['platinumcoins'] = floor($data['current']['marketvalue'] / 100);
+        $data['current']['goldcoins'] = floor($data['current']['marketvalue'] - $data['current']['platinumcoins'] * 100);
+        $data['current']['coppercoins'] = round(($data['current']['marketvalue'] - $data['current']['platinumcoins'] * 100 - $data['current']['goldcoins']) * 100);
 
         $query = "SELECT MAX(marketvalue) AS pricemax, MIN(marketvalue) AS pricemin, AVG(marketvalue) AS priceavg, date(ts) AS bmdate, UNIX_TIMESTAMP(date(ts))*1000 AS tstamp " .
                 "FROM prices " .
