@@ -10,9 +10,9 @@ function writeAddRemove(id) {
     console.log(id);
     console.log(arr.indexOf(id));
     if (arr.indexOf(id) >= 0) {
-        document.write('<a href="#" onclick="javascript:remStockID('+id+'); window.location.reload();">Remove from favorites</a>');
+        document.write('<a href="#" title="Remove from favorites" onclick="javascript:remStockID('+id+'); window.location.reload();"><i class="fa fa-star"></i></a>');
     } else {
-        document.write('<a href="#" onclick="javascript:addStockID('+id+'); window.location.reload();">Add to favorites</a>');
+        document.write('<a href="#" title="Add to favorites" onclick="javascript:addStockID('+id+'); window.location.reload();"><i class="fa fa-star-o"></i></a>');
     }
 }
 

@@ -22,7 +22,7 @@
             $('#month').highcharts({
                 title: { text: '{{ data.basic.title}}', },
                 tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' },
-                chart: { height: 300 },
+                chart: { height: 320 },
                 yAxis: { title: { text: 'Gold Coins' }, },
                 xAxis: {
                     categories: [{% for item in data.month %}'{{ item.bmdate }}'{% if loop.last == false %},{% endif %}{% endfor %}]
@@ -75,17 +75,14 @@
 
 {% block blcharts %}
     <h1>
+        <script>
+            writeAddRemove({{ data.basic.id_stock }});
+        </script>
         {{ data.basic.title}}
         <span class="hundretsparks">
             {% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}
         </span>
     </h1>
-
-    <p>
-        <script>
-            writeAddRemove({{ data.basic.id_stock }});
-        </script>
-    </p>
 
     <h2>24 Hours</h2>
     <div id="twentyfour"></div>
