@@ -19,6 +19,7 @@ define(
 // blockmarket data
 define('BM_MARKETDATA_URL', 'http://blockmarket.theblockheads.net/');
 define('BM_MARKETDATA_REGEX', '/' . 'graph\?item_id=([0-9]{1,4})">([A-Z ]+)<\/a><\/td><td>([0-9\.]+)<\/td>' . '/');
+define('BM_WIKI_URL', 'http://theblockheadswiki.com/');
 
 // theme
 define('BM_THEME', 'default');

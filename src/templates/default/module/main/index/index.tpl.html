@@ -90,6 +90,9 @@
         {{ data.current.goldcoins}} Gold
         {{ data.current.coppercoins}} Copper
         {% if data.current.units > 1 %}({{ data.current.units }} Units){% endif %}
+        {% if data.basic.url.wiki is defined %}
+            <a href="{{data.basic.url.wiki}}" target="_blank" title="The Blockheads Wiki"><i class="fa fa-globe"></i></a>
+        {% endif %}
     </p>
 
     <div id="twentyfour"></div>

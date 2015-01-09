@@ -43,6 +43,10 @@ class IndexController extends AbstractMainController
             $data['basic'] = $temp[0];
         }
 
+        $data['basic']['title'] = preg_replace_callback('/(?<=\s|^)[a-z]/', function($match) { return strtoupper($match[0]); }, strtolower($data['basic']['title']));
+        $data['basic']['url']['wiki'] = BM_WIKI_URL . 'wiki/' . str_replace(' ', '_', $data['basic']['title']);
+        //$data['basic']['url']['icon'] = BM_WIKI_URL . 'wiki/File:' . str_replace(' ', '_', $data['basic']['title']) . '_Icon.png';
+
         $data['config']['timezone']['zone'] = date("e");
         $data['config']['timezone']['gmtdiff'] = date("O");
         $data['config']['timezone']['gmtdiffhours'] = substr($data['config']['timezone']['gmtdiff'], 0, 3);
