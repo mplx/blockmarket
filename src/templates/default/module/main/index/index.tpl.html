@@ -1,5 +1,94 @@
-<html>
-<body>
-<h1>HELLO BLOCKWORLD!</h1>
-</body>
-</html>
+{% extends "body.tpl.html" %}
+
+{% block headjs %}
+    <script type="text/javascript">
+        $(function() {
+            $('.hundretsparks').sparkline();
+
+            $('#twentyfour').highcharts('StockChart', {
+                title : { enabled : false },
+                navigator: { enabled : false },
+                scrollbar: { enabled : false },
+                rangeSelector: { enabled: false },
+                series: [{
+                    name: '{{ data.basic.title}}',
+                    data: [{% for item in data.twentyfour %}
+                                [{{ item.tstamp }},{{ item.marketvalue }}]
+                                {% if loop.last == false %},{% endif %}
+                           {% endfor %}],
+                    tooltip: { valueDecimals: 4 }
+                }]
+            });
+
+            $('#month').highcharts({
+                title: {
+                    text: '{{ data.basic.title}}',
+                },
+                tooltip: {
+                    valueDecimals: 4,
+                    valueSuffix: ' Gold'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Gold'
+                    },
+                },
+                xAxis: {
+                    categories: [{% for item in data.month %}'{{ item.bmdate }}'{% if loop.last == false %},{% endif %}{% endfor %}]
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Minimum',
+                    data: [{% for item in data.month %}[{{ item.pricemin }}]{% if loop.last == false %},{% endif %}{% endfor %}]
+                }, {
+                    name: 'Maximum',
+                    data: [{% for item in data.month %}[{{ item.pricemax }}]{% if loop.last == false %},{% endif %}{% endfor %}]
+                }, {
+                    name: 'Average',
+                    data: [{% for item in data.month %}[{{ item.priceavg }}]{% if loop.last == false %},{% endif %}{% endfor %}]
+                }]
+            });
+
+        });
+    </script>
+{% endblock %}
+
+{% block blitems %}
+    <h1>Items</h1>
+
+    <h2>Trends</h2>
+
+    <h2>Favorites</h2>
+
+    <h2>List</h2>
+    <ol>
+        {% for item in stocks %}
+            <li><a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a></li>
+        {% endfor %}
+    </ol>
+{% endblock %}
+
+{% block blreceips %}
+    <h1>Receips</h1>
+{% endblock %}
+
+{% block blcharts %}
+    <h1>
+        {{ data.basic.title}}
+        <span class="hundretsparks">
+            {% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}
+        </span>
+    </h1>
+
+    <h2>24 hours</h2>
+    <div id="twentyfour"></div>
+
+    <h2>Month</h2>
+    <div id="month"></div>
+
+{% endblock %}
