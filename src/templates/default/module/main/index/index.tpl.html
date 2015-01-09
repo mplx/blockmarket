@@ -10,6 +10,9 @@
                 navigator: { enabled : false },
                 scrollbar: { enabled : false },
                 rangeSelector: { enabled: false },
+                chart: {
+                    height: 300
+                },
                 series: [{
                     name: '{{ data.basic.title}}',
                     data: [{% for item in data.twentyfour %}[{{ item.tstamp }},{{ item.marketvalue }}]{% if loop.last == false %},{% endif %}{% endfor %}],
@@ -24,6 +27,9 @@
                 tooltip: {
                     valueDecimals: 4,
                     valueSuffix: ' Gold'
+                },
+                chart: {
+                    height: 300
                 },
                 yAxis: {
                     title: {
