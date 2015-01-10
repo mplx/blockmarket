@@ -89,7 +89,7 @@ class IndexController extends AbstractMainController
             "SELECT marketvalue, UNIX_TIMESTAMP(ts)*1000 AS tstamp " .
             "FROM prices " .
             "WHERE stock_id = %d " .
-            "ORDER BY ts DESC LIMIT 0,100",
+            "ORDER BY ts DESC LIMIT 0,150",
             $id
         );
         $temp = $this->db->query($query);
