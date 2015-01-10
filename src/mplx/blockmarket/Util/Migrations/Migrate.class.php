@@ -24,11 +24,12 @@ class Migrate
 
         $schema = $this->getSchema();
 
-        /*
-        if ($schema<2) {
-            /$this->setSchema(2);
+        if ($schema < 2) {
+            $result = $this->upgradeDatabase002();
+            $this->setSchema(2);
         }
 
+        /*
         if ($schema<3) {
             $this->setSchema(3);
         }
@@ -70,5 +71,22 @@ class Migrate
     private function setSchema($value)
     {
         return $this->db->setConf('schema', $value);
+    }
+
+    private function upgradeDatabase002()
+    {
+        $queries=array();
+        // @codingStandardsIgnoreStart
+        $queries[] = "TRUNCATE TABLE `stocks`";
+        $queries[] = "ALTER TABLE `stocks` ADD COLUMN `title_original` VARCHAR(50) NOT NULL AFTER `title`";
+        $queries[] = "ALTER TABLE `stocks` ADD COLUMN `title_wiki` VARCHAR(50) NULL AFTER `title_original`;";
+        $queries[] = "ALTER TABLE `stocks` ADD COLUMN `icon_path` VARCHAR(50) NULL DEFAULT NULL AFTER `title_wiki`;";
+        $queries[] = "ALTER TABLE `stocks` ADD COLUMN `enabled` BIT(1) NOT NULL DEFAULT 1 AFTER `icon_path`;";
+        // @codingStandardsIgnoreEnd
+        foreach ($queries as $q) {
+            //echo "*** " . $q . PHP_EOL;
+            $result = $this->db->query($q, false);
+        }
+        return true;
     }
 }

@@ -46,11 +46,38 @@ class UpdateStock
 
     private function storeStocks($data)
     {
+        $fields = array(
+            array ('name'=>'title_original', 'type'=>'%s'),
+            array ('name'=>'title_wiki', 'type'=>'%s'),
+        );
+        $qfields = $qdirective = $qupdate = '';
+        foreach ($fields as $f) {
+            $qfields .= ', ' . $f['name'];
+            $qdirective .= ', ' . $f['type'];
+            $qupdate .= ', ' . $f['name'] . '=VALUES(' . $f['name'] . ')';
+        }
+        $sql ="INSERT INTO stocks (id_stock, title" . $qfields . ") VALUES (%d, %s" . $qdirective . ") ".
+              "ON DUPLICATE KEY UPDATE title=VALUES(title)" . $qupdate;
+
         $queries = array();
-        $sql ="INSERT INTO stocks (id_stock, title) VALUES (%d, %s) ".
-              "ON DUPLICATE KEY UPDATE title=VALUES(title)";
         foreach ($data as $d) {
-            $queries[] = sprintf($sql, $d['blockid'], $this->db->pdo()->quote($d['name']));
+            $title_org = $d['name'];
+            $title = preg_replace_callback(
+                '/(?<=\s|^)[a-z]/',
+                function($match) {
+                    return strtoupper($match[0]);
+                },
+                strtolower($title_org)
+            );
+            $title_wiki = str_replace(' ', '_', $title);
+
+            $queries[] = sprintf(
+                $sql,
+                $d['blockid'],
+                $this->db->pdo()->quote($title),
+                $this->db->pdo()->quote($title_org),
+                $this->db->pdo()->quote($title_wiki)
+            );
         }
         foreach ($queries as $q) {
             $result = $this->db->query($q, false);

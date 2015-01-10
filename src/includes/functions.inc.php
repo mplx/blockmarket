@@ -6,17 +6,17 @@
  * @package     blockmarket
  **/
 
- function bm_COOKIE($key, $alt = false)
- {
+function bm_COOKIE($key, $alt = false)
+{
     if (isset($_COOKIE[$key])) {
         return $_COOKIE[$key];
     } else {
         return $alt;
     }
- }
+}
 
- function bm_GET($key, $alt = false)
- {
+function bm_GET($key, $alt = false)
+{
     if (isset($_GET[$key])) {
         return $_GET[$key];
     } else {

@@ -17,8 +17,9 @@ class IndexController extends AbstractMainController
     {
         parent::__construct($db, $twig);
         $this->setActions(
-            array('index', 'stock'), 'stock')
-        ;
+            array('index', 'stock'),
+            'stock'
+        );
     }
 
     protected function executeIndex()
@@ -43,13 +44,18 @@ class IndexController extends AbstractMainController
             $data['basic'] = $temp[0];
         }
 
-        $data['basic']['title'] = preg_replace_callback('/(?<=\s|^)[a-z]/', function($match) { return strtoupper($match[0]); }, strtolower($data['basic']['title']));
-        $data['basic']['url']['wiki'] = BM_WIKI_URL . 'wiki/' . str_replace(' ', '_', $data['basic']['title']);
-        //$data['basic']['url']['icon'] = BM_WIKI_URL . 'wiki/File:' . str_replace(' ', '_', $data['basic']['title']) . '_Icon.png';
+        if (isset($data['basic']['title_wiki'])) {
+            $data['basic']['url']['wiki'] = BM_WIKI_URL . 'wiki/' . $data['basic']['title_wiki'];
+            //$data['basic']['url']['icon'] = BM_WIKI_URL . 'wiki/File:' . $data['basic']['title_wiki'] . '_Icon.png';
+        }
+        if (isset($data['basic']['icon_path'])) {
+            $data['basic']['url']['icon'] = BM_WIKI_URL . $data['basic']['icon_path'];
+        }
 
         $data['config']['timezone']['zone'] = date("e");
         $data['config']['timezone']['gmtdiff'] = date("O");
         $data['config']['timezone']['gmtdiffhours'] = substr($data['config']['timezone']['gmtdiff'], 0, 3);
+        $data['config']['wiki_url'] = BM_WIKI_URL;
 
         if (bm_COOKIE('favorites')) {
             $query = '';
@@ -64,26 +70,44 @@ class IndexController extends AbstractMainController
                         $query .= "id_stock = " . $fav;
                     }
                 }
-                $query = "SELECT id_stock, title FROM stocks WHERE " . $query . " ORDER BY title ASC";
-                $data['favorites'] = $this->db->query($query);;
+                $query = "SELECT id_stock, title, icon_path " .
+                         "FROM stocks " .
+                         "WHERE enabled=1 AND (" . $query . ") " .
+                         "ORDER BY title ASC";
+                $data['favorites'] = $this->db->query($query);
             }
         }
 
-        $query = sprintf("SELECT marketvalue, UNIX_TIMESTAMP(ts)*1000 AS tstamp FROM prices WHERE stock_id = %d ORDER BY ts DESC LIMIT 0,100", $id);
+        $query = sprintf(
+            "SELECT marketvalue, UNIX_TIMESTAMP(ts)*1000 AS tstamp " .
+            "FROM prices " .
+            "WHERE stock_id = %d " .
+            "ORDER BY ts DESC LIMIT 0,100",
+            $id
+        );
         $temp = $this->db->query($query);
         $data['hundret'] = array_reverse($temp);
 
-        $query = sprintf("SELECT marketvalue, UNIX_TIMESTAMP(ts)*1000 AS tstamp FROM prices WHERE stock_id = %d AND ts >= DATE_SUB(NOW(), INTERVAL 1 DAY)", $id);
+        $query = sprintf(
+            "SELECT marketvalue, UNIX_TIMESTAMP(ts)*1000 AS tstamp " .
+            "FROM prices " .
+            "WHERE stock_id = %d AND ts >= DATE_SUB(NOW(), INTERVAL 1 DAY)",
+            $id
+        );
         $temp = $this->db->query($query);
         $data['twentyfour'] = $temp;
         $data['current']['marketvalue'] = $data['twentyfour'][count($data['twentyfour'])-1]['marketvalue'];
         $units = 1;
-        if ($data['current']['marketvalue']<=0.000999) { $units = 100; }
-        elseif ($data['current']['marketvalue']<=0.009999) { $units = 100; }
+        if ($data['current']['marketvalue']<=0.009999) {
+            $units = 100;
+        }
         $data['current']['units'] = $units;
-        $data['current']['platinumcoins'] = floor($data['current']['marketvalue'] * $units / 100);
-        $data['current']['goldcoins'] = floor($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100);
-        $data['current']['coppercoins'] = round(($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100 - $data['current']['goldcoins']) * 100);
+        $data['current']['platinumcoins'] =
+            floor($data['current']['marketvalue'] * $units / 100);
+        $data['current']['goldcoins'] =
+            floor($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100);
+        $data['current']['coppercoins'] =
+            round(($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100 - $data['current']['goldcoins']) * 100);
 
         $query = "SELECT MAX(marketvalue) AS pricemax, MIN(marketvalue) AS pricemin, AVG(marketvalue) AS priceavg, date(ts) AS bmdate, UNIX_TIMESTAMP(date(ts))*1000 AS tstamp " .
                 "FROM prices " .

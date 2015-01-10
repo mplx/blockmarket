@@ -88,7 +88,7 @@ class Database
             return $this->pdo;
         } catch (\PDOException $e) {
             $this->status = false;
-            trigger_error('MySQL connection failed: '.$e->getMessage(), E_USER_WARNING);
+            throw new \Exception('MySQL connection failed: '.$e->getMessage());
             return false;
         }
     }
@@ -114,6 +114,7 @@ class Database
                 case 'update':
                 case 'delete':
                 case 'show t':
+                case 'trunca':
                     $result = $this->getNumRows();
                     break;
                 default:
@@ -163,7 +164,7 @@ class Database
 
     protected function error(\PDOException $e)
     {
-        trigger_error('SQL error: ' . $e->getMessage(), E_USER_WARNING);
+        throw new \Exception('SQL error: ' . $e->getMessage());
     }
 
     public function getConf($key)
@@ -175,19 +176,21 @@ class Database
     public function setConf($key, $value)
     {
         $query = "UPDATE `config` SET `value` = " . $this->quote($value) . " WHERE `key` = ". $this->quote($key);
-        $result = $this->query();
+        $result = $this->query($query);
         return $result[0]['value'];
     }
 
     public function getStocks($id = null)
     {
         if ($id) {
-            $query = sprintf("SELECT id_stock, title FROM stocks WHERE id_stock = %d ORDER BY title ASC", $id);
+            $query = sprintf(
+                "SELECT id_stock, title, title_wiki, icon_path FROM stocks WHERE id_stock = %d ORDER BY title ASC",
+                $id
+            );
         } else {
-            $query = "SELECT id_stock, title FROM stocks ORDER BY title ASC";
+            $query = "SELECT id_stock, title, icon_path FROM stocks WHERE enabled=1 ORDER BY title ASC";
         }
 
         return $this->query($query);
     }
-
 }

@@ -52,19 +52,31 @@
 {% block blitems %}
     {% if data.favorites is defined %}
         <h2>Favorites</h2>
-        <ul>
+        <p style="margin-left: 5px" >
         {% for item in data.favorites %}
-            <li><a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a></li>
+            {% if item.icon_path is null %}
+                <img width="12" height="12" src="/static/img/void.gif" />
+            {% else %}
+                <img width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
+            {% endif %}
+            <a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a>
+            <br />
         {% endfor %}
-        </ul>
+        </p>
     {% endif %}
 
     <h2>Trade Portal</h2>
-    <ol>
-        {% for item in stocks %}
-            <li><a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a></li>
-        {% endfor %}
-    </ol>
+    <p style="margin-left: 5px" >
+    {% for item in stocks %}
+        {% if item.icon_path is null %}
+            <img width="12" height="12" src="/static/img/void.gif" />
+        {% else %}
+            <img width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
+        {% endif %}
+        <a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a>
+        <br />
+    {% endfor %}
+    </p>
 {% endblock %}
 
 {% block blreceips %}
@@ -80,6 +92,9 @@
         <span class="hundretsparks">
             {% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}
         </span>
+        {% if data.basic.url.icon is defined %}
+            <img width="40" height="40" src="{{ data.basic.url.icon }}" />
+        {% endif %}
     </h1>
 
     <p>
@@ -91,7 +106,7 @@
         {{ data.current.coppercoins}} Copper
         {% if data.current.units > 1 %}({{ data.current.units }} Units){% endif %}
         {% if data.basic.url.wiki is defined %}
-            <a href="{{data.basic.url.wiki}}" target="_blank" title="The Blockheads Wiki"><i class="fa fa-globe"></i></a>
+            <a href="{{data.basic.url.wiki}}" rel="nofollow" target="_blank" title="The Blockheads Wiki"><i class="fa fa-globe"></i></a>
         {% endif %}
     </p>
 
