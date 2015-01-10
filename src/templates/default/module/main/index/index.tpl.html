@@ -3,7 +3,8 @@
 {% block headjs %}
     <script type="text/javascript">
         $(function() {
-            $('.hundretsparks').sparkline();
+            sparkvalues = [{% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}]
+            $('.hundretsparks').sparkline(sparkvalues);
 
             $('#twentyfour').highcharts('StockChart', {
                 title : { enabled : false },
@@ -89,9 +90,7 @@
             writeAddRemove({{ data.basic.id_stock }});
         </script>
         {{ data.basic.title}}
-        <span class="hundretsparks">
-            {% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}
-        </span>
+        <span class="hundretsparks">Loading...</span>
         {% if data.basic.url.icon is defined %}
             <img width="40" height="40" src="{{ data.basic.url.icon }}" />
         {% endif %}
