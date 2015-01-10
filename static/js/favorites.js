@@ -30,7 +30,7 @@ function remStockID(id) {
     }
 
     var json_str = JSON.stringify(arr);
-    setCookie('favorites', json_str);
+    setCookie('favorites', json_str, 7);
 }
 
 function addStockID(id) {
@@ -47,7 +47,7 @@ function addStockID(id) {
     }
 
     var json_str = JSON.stringify(arr);
-    setCookie('favorites', json_str);
+    setCookie('favorites', json_str, 7);
 }
 
 // source: http://www.w3schools.com/js/js_cookies.asp
