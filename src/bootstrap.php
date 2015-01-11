@@ -12,6 +12,7 @@
 define('BM_PATH_SRC', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('BM_PATH_INC', BM_PATH_SRC . 'includes' . DIRECTORY_SEPARATOR);
 define('BM_PATH_TPL', BM_PATH_SRC . 'templates' . DIRECTORY_SEPARATOR);
+define('BM_PATH_DATA', BM_PATH_SRC . '..' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR);
 
 // time zone
 if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
