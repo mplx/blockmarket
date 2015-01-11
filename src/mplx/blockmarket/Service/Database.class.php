@@ -147,6 +147,15 @@ class Database
         return $this->pdo()->quote($value);
     }
 
+    public function quoteOrNull($value)
+    {
+        if (is_null($value) || $value == 'null') {
+            return 'null';
+        } else {
+            return $this->quote($value);
+        }
+    }
+
     public function tableExists($table)
     {
         try {
@@ -184,7 +193,7 @@ class Database
     {
         if ($id) {
             $query = sprintf(
-                "SELECT id_stock, title, title_wiki, icon_path FROM stocks WHERE id_stock = %d ORDER BY title ASC",
+                "SELECT id_stock, title, title_wiki, icon_path FROM stocks WHERE id_stock = %d",
                 $id
             );
         } else {
