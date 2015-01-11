@@ -1,0 +1,17 @@
+{
+    "schema": "3",
+    "files": [
+        {
+			"data": "stocks",
+            "name": "stocks.json",
+            "md5": "40f9fc4a2b7974b0fd907775ca5d856a"
+        },
+        {
+			"data": "receipts",
+            "name": "receipts.json",
+            "md5": "9d2d8f955e1f7c86ea4fd1a93e99921c"
+        }
+    ],
+    "exported": "2015-01-11T10:16:24+00:00",
+    "timestamp": "1420971384"
+}

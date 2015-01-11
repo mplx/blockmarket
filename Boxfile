@@ -25,6 +25,7 @@ web1:
     - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install"
   before_deploy:
     - "php bin/migrate.php"
+    - "php bin/import-base-data.php"
     - "php bin/update-data.php"
   after_deploy:
   cron:
