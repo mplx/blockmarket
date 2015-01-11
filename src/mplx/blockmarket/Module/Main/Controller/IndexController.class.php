@@ -112,15 +112,12 @@ class IndexController extends AbstractMainController
             $units = 100;
         }
         $data['current']['units'] = $units;
-        $data['current']['platinumcoins'] =
-            floor($data['current']['marketvalue'] * $units / 100);
-        $data['current']['goldcoins'] =
-            floor($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100);
-        $data['current']['coppercoins'] =
-            round(($data['current']['marketvalue'] * $units - $data['current']['platinumcoins'] * 100 - $data['current']['goldcoins']) * 100);
+        $data['current']['marketcoins'] = toCoinsString($data['current']['marketvalue'] * $units, 'long');
 
         // last month averages
-        $query = "SELECT MAX(marketvalue) AS pricemax, MIN(marketvalue) AS pricemin, AVG(marketvalue) AS priceavg, date(ts) AS bmdate, UNIX_TIMESTAMP(date(ts))*1000 AS tstamp " .
+        $query = "SELECT MAX(marketvalue) AS pricemax, MIN(marketvalue) AS pricemin, " .
+                    "AVG(marketvalue) AS priceavg, date(ts) AS bmdate, " .
+                    "UNIX_TIMESTAMP(date(ts))*1000 AS tstamp " .
                 "FROM prices " .
                 "WHERE stock_id = %d AND date(ts)>=DATE_SUB(NOW(), INTERVAL 1 MONTH) " .
                 "GROUP BY date(ts) " .
@@ -128,6 +125,83 @@ class IndexController extends AbstractMainController
         $query = sprintf($query, $id);
         $temp = $this->db->query($query);
         $data['month'] = $temp;
+
+        // receipts
+        $receipts = $this->db->getReceipts($id);
+        if (is_array($receipts)) {
+            $updated = 1;
+            $iterations = 0;
+            while ($updated==1 && $iterations<20) {
+                $updated = 0;
+                foreach ($receipts as $reckey => $receipt) {
+                    if ($iterations >= $receipt['level']) {
+                        continue;
+                    }
+                    $clone = $receipts[$reckey];
+                    foreach ($clone['items'] as $itemid => $item) {
+                        $buildInfo = $this->db->getReceipts($itemid);
+                        if (is_array($buildInfo) && $buildInfo[0]['target_qty']>0) {
+                            $qty = $clone['items'][$itemid]['qty'];
+                            unset($clone['items'][$itemid]);
+
+                            foreach ($buildInfo[0]['items'] as $subkey => $subitem) {
+                                if (isset($clone['items'][$subkey])) {
+                                    $clone['items'][$subkey]['qty'] =
+                                        $clone['items'][$subkey]['qty'] +
+                                        $subitem['qty'] * $qty;
+                                } else {
+                                    $clone['items'][$subkey] = array(
+                                        'qty' => $subitem['qty'] * $qty
+                                    );
+                                }
+                            }
+                            $updated = 1;
+                        }
+                    }
+                    if ($updated==1) {
+                        $clone['level']++;
+                        $receipts[] = $clone;
+                    }
+                }
+                $iterations++;
+            }
+
+            foreach ($receipts as $reckey => $receipt) {
+                $productionprice = 0;
+                $stockInfo = $this->db->getStockInfo($id);
+                $receipts[$reckey]['target_title'] = $stockInfo['title'];
+                $receipts[$reckey]['target_marketvalue'] = $stockInfo['marketvalue'];
+                foreach ($receipt['items'] as $ikey => $item) {
+                    $stockInfo = $this->db->getStockInfo($ikey);
+                    $receipts[$reckey]['items'][$ikey]['id'] = $ikey;
+                    $receipts[$reckey]['items'][$ikey]['title'] = $stockInfo['title'];
+                    $receipts[$reckey]['items'][$ikey]['marketvalue'] = $stockInfo['marketvalue'];
+                    $productionprice = $productionprice + $stockInfo['marketvalue'] * $item['qty'];
+                }
+                $receipts[$reckey]['target_costs'] = $productionprice;
+                $receipts[$reckey]['target_income'] = $receipts[$reckey]['target_marketvalue'] - $productionprice;
+            }
+            // done
+            $data['receipts'] = $receipts;
+        }
+
+/*
+echo "<pre>";
+print_r($receipts);
+die();
+*/
+
+        // item used in production
+        $query = "SELECT s.id_stock AS id, s.title " .
+                 "FROM stocks s, receipts r " .
+                 "WHERE s.id_stock=r.target_id AND r.target_id<>%d AND (" .
+                 "r.ingredient_1_id=%d OR r.ingredient_2_id=%d OR " .
+                 "r.ingredient_3_id=%d OR r.ingredient_4_id=%d OR r.ingredient_5_id=%d" .
+                 ")" .
+                 "ORDER BY s.title ASC";
+        $query = sprintf($query, $id, $id, $id, $id, $id, $id);
+        $temp = $this->db->query($query);
+        $data['itemusedfor'] = $temp;
 
         // render template
         return $this->twig->render(

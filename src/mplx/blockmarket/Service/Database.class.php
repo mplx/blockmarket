@@ -202,4 +202,53 @@ class Database
 
         return $this->query($query);
     }
+
+    public function getReceipts($id)
+    {
+        if ($id && is_numeric($id)) {
+            $query = sprintf("SELECT * FROM receipts WHERE target_id = %d", $id);
+            $result = $this->query($query);
+            if ($result) {
+                $i = 0;
+                $collection = array();
+                foreach ($result as $receipt) {
+                    $collection[$i] = array(
+                        'target_id' => $receipt['target_id'],
+                        'target_qty' => $receipt['target_qty'],
+                        'level' => 1,
+                        'items' => array()
+                    );
+                    for ($j=1; $j <= 5; $j++) {
+                        if ($receipt['ingredient_' . $j . '_id']) {
+                            $collection[$i]['items'][$receipt['ingredient_' . $j . '_id']] = array(
+                                'qty' => $receipt['ingredient_' . $j . '_qty']
+                            );
+                        }
+                    }
+                    $i++;
+                }
+                return $collection;
+            }
+        }
+        return false;
+    }
+
+    public function getStockInfo($id)
+    {
+        if ($id && is_numeric($id)) {
+            $query = sprintf(
+                "SELECT s.id_stock, s.title, p.marketvalue, p.ts " .
+                "FROM stocks s, prices p " .
+                "WHERE s.id_stock=%d AND s.id_stock=p.stock_id " .
+                "ORDER BY ts DESC " .
+                "LIMIT 0,1 ",
+                $id
+            );
+            $stockinfo = $this->query($query);
+            if (isset($stockinfo[0])) {
+                return $stockinfo[0];
+            }
+        }
+        return false;
+    }
 }

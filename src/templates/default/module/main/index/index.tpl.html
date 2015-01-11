@@ -81,7 +81,51 @@
 {% endblock %}
 
 {% block blreceips %}
-    &nbsp;
+    <h2>Market Info</h2>
+    {% if data.receipts.0 is defined %}
+        {% if data.receipts.0.target_qty<1 %}
+            <div class="alert alert-info" role="alert">
+                This item cannot be crafted from other items.
+            </div>
+        {% else %}
+            You can craft
+            {% if data.receipts.0.target_qty > 1 %}
+                {{ data.receipts.0.target_qty }} items
+            {% else %}
+                this item
+            {% endif %}
+            out of other components:
+            <ol>
+                {% for item in data.receipts.0.items %}
+                    <li><a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a> ({{ item.qty }}x)</li>
+                {% endfor %}
+            </ol>
+            {% if data.receipts.0.target_marketvalue > data.receipts.0.target_costs %}
+                <div class="alert alert-success" role="alert">
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+            {% endif %}
+                To buy all required parts at a trade portal you'll have to spent
+                {{ data.receipts.0.target_costs|coins }} coins
+                while buying the item itself will cost
+                {{ data.receipts.0.target_marketvalue|coins }}
+                coins.
+            </div>
+        {% endif %}
+        {% if data.itemusedfor.0 is defined %}
+            The item is used in the production of:
+            <ol>
+                {% for item in data.itemusedfor %}
+                    <li><a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a></li>
+                {% endfor %}
+            </ol>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            There are no crafting receipts for this item in the database yet.
+            Please come back later.
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block blcharts %}
@@ -100,9 +144,7 @@
         <strong>Marketvalue</strong>:
         {{ data.current.marketvalue}}
         <strong>Coins</strong>:
-        {{ data.current.platinumcoins}} Platinum
-        {{ data.current.goldcoins}} Gold
-        {{ data.current.coppercoins}} Copper
+        {{ data.current.marketcoins}}
         {% if data.current.units > 1 %}({{ data.current.units }} Units){% endif %}
         {% if data.basic.url.wiki is defined %}
             <a href="{{data.basic.url.wiki}}" rel="nofollow" target="_blank" title="The Blockheads Wiki"><i class="fa fa-globe"></i></a>
@@ -111,4 +153,37 @@
 
     <div id="twentyfour"></div>
     <div id="month"></div>
+
+    {% if data.receipts.0 is defined and data.receipts.0.target_qty>0 %}
+    <h2>Crafting</h2>
+        {% for receipt in data.receipts %}
+            {% if receipt.target_marketvalue > receipt.target_costs %}
+            <div class="alert alert-success" role="alert">
+            {% else %}
+            <div class="alert alert-danger" role="alert">
+            {% endif %}
+                <h3 style="margin-top: 0px; margin-bottom: 0px;">
+                    {% if receipt.target_qty > 1 %}{{ receipt.target_qty }}{% endif %}
+                    {{ receipt.target_title }} (Pass {{ receipt.level }})
+                </h3>
+                <p>
+                    {% for item in receipt.items %}
+                        {{ item.qty }}
+                        <a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a> =
+                        {{ item.qty }} x {{ item.marketvalue }} = {{ item.qty * item.marketvalue }}<br />
+                    {% endfor %}
+                    <br />
+                    Production costs: {{ receipt.target_costs }} = {{ receipt.target_costs|coins }}<br />
+                    Marketvalue: {{ receipt.target_marketvalue }} = {{ receipt.target_marketvalue|coins }}<br />
+                    {% if receipt.target_marketvalue > receipt.target_costs %}
+                        Profit: {{ receipt.target_income }} = {{ receipt.target_income|coins }}
+                    {% else %}
+                        Loss: {{ receipt.target_income }} = {{ receipt.target_income|coins }}
+                    {% endif %}
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}
+

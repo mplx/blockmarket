@@ -46,12 +46,14 @@
         <div class="col-md-2"><div id="items">{% block blitems %}{% endblock %}</div></div>
         <div class="col-md-7"><div id="charts">{% block blcharts %}{% endblock %}</div></div>
         <div class="col-md-3">
-            <div id="receips" style="text-align: center">
-                <h1 class="bg-primary" style="border-radius: 15px;">The Blockheads<br />Black Market</h1>
-                {% if data.config.timezone is defined %}
-                    <canvas id="clockid" class="CoolClock:classic:88:true:{{ data.config.timezone.gmtdiffhours }}"></canvas><br />
-                    {{ data.config.timezone.zone }} (GMT{{ data.config.timezone.gmtdiff }})
-                {% endif %}
+            <div id="receips">
+                <div style="text-align: center">
+                    <h1 class="bg-primary" style="border-radius: 15px;">The Blockheads<br />Black Market</h1>
+                    {% if data.config.timezone is defined %}
+                        <canvas id="clockid" class="CoolClock:classic:88:true:{{ data.config.timezone.gmtdiffhours }}"></canvas><br />
+                        {{ data.config.timezone.zone }} (GMT{{ data.config.timezone.gmtdiff }})
+                    {% endif %}
+                </div>
                 {% block blreceips %}{% endblock %}</div>
                 <h2>About</h2>
                 <p>
