@@ -1,4 +1,10 @@
 <?php
+/**
+ * Blockmarket
+ * collect and visualize blockmarket data
+ *
+ * @package     blockmarket
+ **/
 
 namespace mplx\blockmarket\Util\Migrations;
 
@@ -29,15 +35,10 @@ class Migrate
             $this->setSchema(2);
         }
 
-        /*
-        if ($schema<3) {
+        if ($schema < 3) {
+            $result = $this->upgradeDatabase003();
             $this->setSchema(3);
         }
-
-        if ($schema<4) {
-            $this->setSchema(4);
-        }
-        */
 
         return true;
     }
@@ -82,6 +83,37 @@ class Migrate
         $queries[] = "ALTER TABLE `stocks` ADD COLUMN `title_wiki` VARCHAR(50) NULL AFTER `title_original`;";
         $queries[] = "ALTER TABLE `stocks` ADD COLUMN `icon_path` VARCHAR(50) NULL DEFAULT NULL AFTER `title_wiki`;";
         $queries[] = "ALTER TABLE `stocks` ADD COLUMN `enabled` BIT(1) NOT NULL DEFAULT 1 AFTER `icon_path`;";
+        // @codingStandardsIgnoreEnd
+        foreach ($queries as $q) {
+            //echo "*** " . $q . PHP_EOL;
+            $result = $this->db->query($q, false);
+        }
+        return true;
+    }
+
+    private function upgradeDatabase003()
+    {
+        $queries=array();
+        // @codingStandardsIgnoreStart
+        $queries[] = "CREATE TABLE `receipts` (" .
+                    "`id_receipt` SMALLINT(6) UNSIGNED NOT NULL AUTO_INCREMENT, " .
+                    "`target_id` SMALLINT(6) UNSIGNED NOT NULL, " .
+                    "`target_qty` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1', " .
+                    "`tc_rush` DECIMAL(4,1) UNSIGNED NOT NULL, " .
+                    "`tc` SMALLINT(6) UNSIGNED NOT NULL DEFAULT '0', " .
+                    "`ingredient_1_id` SMALLINT(6) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_1_qty` TINYINT(4) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_2_id` SMALLINT(6) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_2_qty` TINYINT(4) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_3_id` SMALLINT(6) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_3_qty` TINYINT(4) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_4_id` SMALLINT(6) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_4_qty` TINYINT(4) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_5_id` SMALLINT(6) UNSIGNED NULL DEFAULT NULL, " .
+                    "`ingredient_5_qty` TINYINT(4) UNSIGNED NULL DEFAULT NULL, " .
+                    "`lastmodified` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " .
+                    "PRIMARY KEY (`id_receipt`)) COLLATE='utf8_general_ci'ENGINE=MyISAM;";
+        $queries[] = "ALTER TABLE `prices` CHANGE COLUMN `marketvalue` `marketvalue` DECIMAL(11,5) NOT NULL DEFAULT '0.00000' AFTER `ts`;";
         // @codingStandardsIgnoreEnd
         foreach ($queries as $q) {
             //echo "*** " . $q . PHP_EOL;
