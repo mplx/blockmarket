@@ -29,6 +29,9 @@ class Router
             $this->services['twig']->enableDebug();
         }
 
+        $filter = new \Twig_SimpleFilter('coins', 'toCoinsString');
+        $this->services['twig']->addFilter($filter);
+
         $modules = $this->getModules();
         foreach ($modules as $id => $module) {
             $this->map[$id] = $module->getControllers();
