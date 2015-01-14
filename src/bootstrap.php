@@ -59,10 +59,12 @@ spl_autoload_register(function($class) {
     }
 }, true, true);
 
-// auto-find all include files
-$includes = glob(BM_PATH_INC . '*.inc.php');
+// list of include files
+$includes = array (
+    'config.inc.php'
+);
 foreach ($includes as $file) {
-    include_once $file;
+    include_once (BM_PATH_INC . $file);
 }
 
 // init db connection
