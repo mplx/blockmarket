@@ -10,7 +10,7 @@ namespace mplx\blockmarket\Service;
 
 class Web
 {
-    function getCookie($key, $alt = false)
+    public static function getCookie($key, $alt = false)
     {
         if (isset($_COOKIE[$key])) {
             return $_COOKIE[$key];
@@ -19,7 +19,7 @@ class Web
         }
     }
 
-    function getRequestGet($key, $alt = false)
+    public static function getRequestGet($key, $alt = false)
     {
         if (isset($_GET[$key])) {
             return $_GET[$key];
@@ -28,7 +28,7 @@ class Web
         }
     }
 
-    function getRequestPost($key, $alt = false)
+    public static function getRequestPost($key, $alt = false)
     {
         if (isset($_POST[$key])) {
             return $_POST[$key];
@@ -37,7 +37,7 @@ class Web
         }
     }
 
-    function getUrl($url, $header = false, $body = true, $timeout = null, $useragent = null)
+    public static function getUrl($url, $header = false, $body = true, $timeout = null, $useragent = null)
     {
         $timeout = $timeout == null ? BM_CURL_TIMEOUT : intval($timeout);
         $useragent = $useragent == null ? BM_CURL_USERAGENT : $useragent;

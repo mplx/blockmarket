@@ -79,5 +79,4 @@ class BlockData
         }
         return false;
     }
-
 }
