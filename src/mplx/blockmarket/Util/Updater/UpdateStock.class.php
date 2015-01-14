@@ -9,14 +9,17 @@
 namespace mplx\blockmarket\Util\Updater;
 
 use mplx\blockmarket\Service\Database;
+use mplx\blockmarket\Service\Web;
 
 class UpdateStock
 {
     protected $db;
+    protected $web;
 
-    public function __construct(Database $db)
+    public function __construct(Database $db, Web $web)
     {
         $this->db = $db;
+        $this->web = $web;
     }
 
     public function run()
@@ -30,7 +33,7 @@ class UpdateStock
     private function fetchData($target)
     {
         $timestamp = date('Y-m-d G:i:s');
-        $website = bm_curl_get($target);
+        $website = $this->web->getUrl($target);
         $result = preg_match_all(BM_MARKETDATA_REGEX, $website, $data);
         $stocks = array();
         foreach ($data[1] as $k => $d) {

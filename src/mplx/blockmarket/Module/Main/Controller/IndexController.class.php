@@ -9,15 +9,17 @@
 namespace mplx\blockmarket\Module\Main\Controller;
 
 use mplx\blockmarket\Service\Database;
+use mplx\blockmarket\Service\Web;
+
 use mplx\blockmarket\Util\BlockMarket;
 
 class IndexController extends AbstractMainController
 {
     protected $data;
 
-    public function __construct(Database $db, \Twig_Environment $twig)
+    public function __construct(Database $db, \Twig_Environment $twig, Web $web)
     {
-        parent::__construct($db, $twig);
+        parent::__construct($db, $twig, $web);
 
         $this->setActions(
             array('index', 'stock'),
@@ -68,9 +70,9 @@ class IndexController extends AbstractMainController
         $data['config']['wiki_url'] = BM_WIKI_URL;
 
         // favorites
-        if (bm_COOKIE('favorites')) {
+        if ($this->web->getCookie('favorites')) {
             $query = '';
-            $result = preg_match_all('/([0-9]+)/', bm_COOKIE('favorites'), $lookup);
+            $result = preg_match_all('/([0-9]+)/', $this->web->getCookie('favorites'), $lookup);
             if (is_array($lookup) && count($lookup[0])>0 && count($lookup[0])<=5) {
                 $lookup = array_unique($lookup[0]);
                 foreach ($lookup as $fav) {
@@ -144,7 +146,7 @@ class IndexController extends AbstractMainController
                     }
                     $clone = $receipts[$reckey];
                     foreach ($clone['items'] as $itemid => $item) {
-                        $buildInfo = $this->db->getReceipts($itemid);
+                        $buildInfo = $this->data->getReceipts($itemid);
                         if (is_array($buildInfo) && $buildInfo[0]['target_qty']>0) {
                             $qty = $clone['items'][$itemid]['qty'];
                             unset($clone['items'][$itemid]);
@@ -177,7 +179,7 @@ class IndexController extends AbstractMainController
                 $receipts[$reckey]['target_title'] = $stockInfo['title'];
                 $receipts[$reckey]['target_marketvalue'] = $stockInfo['marketvalue'];
                 foreach ($receipt['items'] as $ikey => $item) {
-                    $stockInfo = $this->db->getStockInfo($ikey);
+                    $stockInfo = $this->data->getStockInfo($ikey);
                     $receipts[$reckey]['items'][$ikey]['id'] = $ikey;
                     $receipts[$reckey]['items'][$ikey]['title'] = $stockInfo['title'];
                     $receipts[$reckey]['items'][$ikey]['marketvalue'] = $stockInfo['marketvalue'];

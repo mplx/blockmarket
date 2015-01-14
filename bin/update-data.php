@@ -12,5 +12,6 @@ if (php_sapi_name() !== 'cli') {
 
 require_once dirname(__FILE__) . '/../src/bootstrap.php';
 
-$stocks = new \mplx\blockmarket\Util\Updater\UpdateStock($db);
+$web = new \mplx\blockmarket\Service\Web();
+$stocks = new \mplx\blockmarket\Util\Updater\UpdateStock($db, $web);
 return $stocks->run();

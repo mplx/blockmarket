@@ -32,6 +32,8 @@ class Router
         $filter = new \Twig_SimpleFilter('coins', 'toCoinsString');
         $this->services['twig']->addFilter($filter);
 
+        $this->services['web'] = new \mplx\blockmarket\Service\Web();
+
         $modules = $this->getModules();
         foreach ($modules as $id => $module) {
             $this->map[$id] = $module->getControllers();
@@ -47,8 +49,8 @@ class Router
 
     public function run()
     {
-        $module = bm_GET('module', $this->default_module);
-        $action = bm_GET('action', null);
+        $module = $this->services['web']->getRequestGet('module', $this->default_module);
+        $action = $this->services['web']->getRequestGet('action', null);
 
         $controller = $this->getController($module);
         $response = $controller->initialize($action);
@@ -64,7 +66,7 @@ class Router
         if ($controller === false) {
             throw new \InvalidArgumentException('Controller is not registered');
         }
-        $controller = new $controller($this->services['db'], $this->services['twig']);
+        $controller = new $controller($this->services['db'], $this->services['twig'], $this->services['web']);
         if (!$controller instanceof \mplx\blockmarket\Module\ControllerInterface) {
             throw new \Exception('Controller does not use ControllerInterface');
         }

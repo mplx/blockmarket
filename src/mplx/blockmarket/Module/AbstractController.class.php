@@ -9,6 +9,7 @@
 namespace mplx\blockmarket\Module;
 
 use mplx\blockmarket\Service\Database;
+use mplx\blockmarket\Service\Web;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractController implements ControllerInterface
@@ -19,11 +20,13 @@ abstract class AbstractController implements ControllerInterface
 
     protected $db;
     protected $twig;
+    protected $web;
 
-    public function __construct(Database $db, \Twig_Environment $twig)
+    public function __construct(Database $db, \Twig_Environment $twig, Web $web)
     {
         $this->db = $db;
         $this->twig = $twig;
+        $this->web = $web;
     }
 
     public function initialize($action = null)
