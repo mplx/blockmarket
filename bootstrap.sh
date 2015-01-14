@@ -29,7 +29,7 @@
 /bin/cat <<EOF >>/etc/apache2/sites-available/001-vagrant
 <VirtualHost *:80>
         ServerAdmin webmaster@localhost
-        DocumentRoot /var/www/
+        DocumentRoot /var/www/public
         <Directory /var/www/>
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride All

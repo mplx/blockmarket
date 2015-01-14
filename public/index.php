@@ -6,7 +6,7 @@
  * @package     blockmarket
  **/
 
-require_once 'src/bootstrap.php';
+require_once '../src/bootstrap.php';
 
 try {
     $router = new mplx\blockmarket\Router();
