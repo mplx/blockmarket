@@ -57,13 +57,20 @@
                 {% block blreceips %}{% endblock %}</div>
                 <h2>About</h2>
                 <p>
-                    <strong>Black Market</strong>
-                    is an inofficial market monitor for the game
-                    <strong>
-                        <a title="Official Website" target="_blank" rel="nofollow" href="http://theblockheads.net/">The Blockheads</a>
-                    </strong>.
-                    Market data is based on the official, cloud wide item rates ("blockmarket");
-                    prices at your local trade portal may vary.
+                    <div>
+                        <strong>Black Market</strong>
+                        is an inofficial market monitor for the game
+                        <strong>
+                            <a title="Official Website" target="_blank" rel="nofollow" href="http://theblockheads.net/">The Blockheads</a>
+                        </strong>.
+                        Market data is based on the official, cloud wide item rates ("blockmarket");
+                        prices at your local trade portal may vary.
+                        {% if data.config.issues_url is defined and data.config.source_url is defined %}
+                                <br />
+                                <a title="Open Source" target="_blank" rel="nofollow" href="{{ data.config.source_url }}">Source</a> |
+                                <a title="Issue Tracker" target="_blank" rel="nofollow" href="{{ data.config.issues_url }}">Issue Tracker</a>
+                        {% endif %}
+                    </div>
 
                     <div>
                         <a title="The Blockheads: Official Website (Logo: &copy; Majic Jungle Software)" target="_blank" rel="nofollow" href="http://theblockheads.net/">

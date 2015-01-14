@@ -68,6 +68,8 @@ class IndexController extends AbstractMainController
         $data['config']['timezone']['gmtdiff'] = date("O");
         $data['config']['timezone']['gmtdiffhours'] = substr($data['config']['timezone']['gmtdiff'], 0, 3);
         $data['config']['wiki_url'] = BM_WIKI_URL;
+        $data['config']['issues_url'] = BM_DEV_ISSUE_TRACKER;
+        $data['config']['source_url'] = BM_DEV_SOURCECODE;
 
         // favorites
         if ($this->web->getCookie('favorites')) {
