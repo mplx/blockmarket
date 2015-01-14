@@ -9,17 +9,22 @@
 namespace mplx\blockmarket\Module\Main\Controller;
 
 use mplx\blockmarket\Service\Database;
+use mplx\blockmarket\Util\BlockMarket;
 
 class IndexController extends AbstractMainController
 {
+    protected $data;
 
     public function __construct(Database $db, \Twig_Environment $twig)
     {
         parent::__construct($db, $twig);
+
         $this->setActions(
             array('index', 'stock'),
             'stock'
         );
+
+        $this->data = new BlockMarket\BlockData($db);
     }
 
     protected function executeIndex()
@@ -40,7 +45,7 @@ class IndexController extends AbstractMainController
         }
 
         // get stock
-        $temp = $this->db->getStocks($id);
+        $temp = $this->data->getStocks($id);
         if (! $temp) {
             return $this->twig->render('error.tpl.html');
         } else {
@@ -127,7 +132,7 @@ class IndexController extends AbstractMainController
         $data['month'] = $temp;
 
         // receipts
-        $receipts = $this->db->getReceipts($id);
+        $receipts = $this->data->getReceipts($id);
         if (is_array($receipts)) {
             $updated = 1;
             $iterations = 0;
@@ -168,7 +173,7 @@ class IndexController extends AbstractMainController
 
             foreach ($receipts as $reckey => $receipt) {
                 $productionprice = 0;
-                $stockInfo = $this->db->getStockInfo($id);
+                $stockInfo = $this->data->getStockInfo($id);
                 $receipts[$reckey]['target_title'] = $stockInfo['title'];
                 $receipts[$reckey]['target_marketvalue'] = $stockInfo['marketvalue'];
                 foreach ($receipt['items'] as $ikey => $item) {
@@ -208,7 +213,7 @@ die();
             'module/main/index/index.tpl.html',
             array(
                 'data' => $data,
-                'stocks' => $this->db->getStocks()
+                'stocks' => $this->data->getStocks()
             )
         );
     }
