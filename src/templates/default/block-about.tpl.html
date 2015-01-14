@@ -1,0 +1,28 @@
+<h2>About</h2>
+
+<div>
+    <strong>Black Market</strong>
+    is an inofficial market monitor for the game
+    <strong>
+        <a title="Official Website" target="_blank" rel="nofollow" href="http://theblockheads.net/">The Blockheads</a>
+    </strong>.
+    Market data is based on the official, cloud wide item rates ("blockmarket");
+    prices at your local trade portal may vary.
+    {% if data.config.issues_url is defined and data.config.source_url is defined %}
+            <br />
+            <a title="Open Source" target="_blank" rel="nofollow" href="{{ data.config.source_url }}">Source</a> |
+            <a title="Issue Tracker" target="_blank" rel="nofollow" href="{{ data.config.issues_url }}">Issue Tracker</a>
+    {% endif %}
+</div>
+
+<div>
+    <a title="The Blockheads: Official Website (Logo: &copy; Majic Jungle Software)" target="_blank" rel="nofollow" href="http://theblockheads.net/">
+        <img alt="The Blockheads" src="/static/img/theblockheads.png" style="padding:5px;"/>
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=com.noodlecake.blockheads" target="_blank" rel="nofollow">
+        <img alt="Get it on Google Play" src="/static/img/appStoreBadge_Google.png" style="padding:5px;"/>
+    </a>
+    <a href="https://itunes.apple.com/us/app/the-blockheads/id519596406" target="_blank" rel="nofollow">
+        <img src="/static/img/appStoreBadge_Apple.png" style="padding:5px;padding-left:0px">
+    </a>
+</div>
