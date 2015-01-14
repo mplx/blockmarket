@@ -156,6 +156,15 @@ class Database
         }
     }
 
+    public function NullToNull($value)
+    {
+        if (is_null($value)) {
+            return 'null';
+        } else {
+            return $this->quote($value);
+        }
+    }
+
     public function tableExists($table)
     {
         try {

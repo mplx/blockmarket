@@ -123,27 +123,28 @@ class Import
             die('ERROR: receipts dump corrupted!?');
         }
 
-        $sql = "INSERT INTO receipts VALUES(%d, %d, %d, %f, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %s)";
+        $sql = "INSERT INTO receipts VALUES(%d, %d, %d, %f, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)";
         foreach ($receipts as $row) {
-            $queries[] = sprintf(
+            $receipt = sprintf(
                 $sql,
                 $row->id_receipt,
                 $row->target_id,
                 $row->target_qty,
                 $row->tc_rush,
                 $row->tc,
-                $row->ingredient_1_id,
-                $row->ingredient_1_qty,
-                $row->ingredient_2_id,
-                $row->ingredient_2_qty,
-                $row->ingredient_3_id,
-                $row->ingredient_3_qty,
-                $row->ingredient_4_id,
-                $row->ingredient_4_qty,
-                $row->ingredient_5_id,
-                $row->ingredient_5_qty,
+                $this->db->NullToNull($row->ingredient_1_id),
+                $this->db->NullToNull($row->ingredient_1_qty),
+                $this->db->NullToNull($row->ingredient_2_id),
+                $this->db->NullToNull($row->ingredient_2_qty),
+                $this->db->NullToNull($row->ingredient_3_id),
+                $this->db->NullToNull($row->ingredient_3_qty),
+                $this->db->NullToNull($row->ingredient_4_id),
+                $this->db->NullToNull($row->ingredient_4_qty),
+                $this->db->NullToNull($row->ingredient_5_id),
+                $this->db->NullToNull($row->ingredient_5_qty),
                 $this->db->quoteOrNull($row->lastmodified)
             );
+            $queries[] = $receipt;
         }
 
         // execute sql
