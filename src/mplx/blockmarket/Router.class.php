@@ -29,7 +29,7 @@ class Router
             $this->services['twig']->enableDebug();
         }
 
-        $filter = new \Twig_SimpleFilter('coins', 'toCoinsString');
+        $filter = new \Twig_SimpleFilter('coins', '\mplx\blockmarket\Util\BlockMarket\BlockUtil::toCoinsString');
         $this->services['twig']->addFilter($filter);
 
         $this->services['web'] = new \mplx\blockmarket\Service\Web();

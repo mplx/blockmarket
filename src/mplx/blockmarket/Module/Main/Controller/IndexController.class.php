@@ -119,7 +119,6 @@ class IndexController extends AbstractMainController
             $units = 100;
         }
         $data['current']['units'] = $units;
-        $data['current']['marketcoins'] = toCoinsString($data['current']['marketvalue'] * $units, 'long');
 
         // last month averages
         $query = "SELECT MAX(marketvalue) AS pricemax, MIN(marketvalue) AS pricemin, " .

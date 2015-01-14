@@ -144,8 +144,11 @@
         <strong>Marketvalue</strong>:
         {{ data.current.marketvalue}}
         <strong>Coins</strong>:
-        {{ data.current.marketcoins}}
-        {% if data.current.units > 1 %}({{ data.current.units }} Units){% endif %}
+        {% if data.current.units <= 1 %}
+            {{ data.current.marketvalue|coins}}
+        {% else %}
+            {{ (data.current.marketvalue * data.current.units)|coins}} ({{ data.current.units }} Units)
+        {% endif %}
         {% if data.basic.url.wiki is defined %}
             <a href="{{data.basic.url.wiki}}" rel="nofollow" target="_blank" title="The Blockheads Wiki"><i class="fa fa-globe"></i></a>
         {% endif %}
