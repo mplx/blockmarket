@@ -1,133 +1,5 @@
 {% extends "body.tpl.html" %}
 
-{% block headjs %}
-    <script type="text/javascript">
-        $(function() {
-            sparkvalues = [{% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}]
-            $('.hundretsparks').sparkline(sparkvalues);
-
-            $('#twentyfour').highcharts('StockChart', {
-                title : { enabled : false },
-                navigator: { enabled : false },
-                scrollbar: { enabled : false },
-                rangeSelector: { enabled: false },
-                chart: { height: 340 },
-                yAxis: { title: { text: 'Gold Coins' }, opposite: false },
-                series: [{
-                    name: '{{ data.basic.title}}',
-                    data: [{% for item in data.twentyfour %}[{{ item.tstamp }},{{ item.marketvalue }}]{% if loop.last == false %},{% endif %}{% endfor %}],
-                    tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' }
-                }]
-            });
-
-            $('#month').highcharts({
-                title: { text: '{{ data.basic.title}}', },
-                tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' },
-                chart: { height: 340 },
-                yAxis: { title: { text: 'Gold Coins' }, },
-                xAxis: {
-                    categories: [{% for item in data.month %}'{{ item.bmdate }}'{% if loop.last == false %},{% endif %}{% endfor %}]
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle',
-                    borderWidth: 0
-                },
-                series: [{
-                    name: 'Minimum',
-                    data: [{% for item in data.month %}[{{ item.pricemin }}]{% if loop.last == false %},{% endif %}{% endfor %}]
-                }, {
-                    name: 'Maximum',
-                    data: [{% for item in data.month %}[{{ item.pricemax }}]{% if loop.last == false %},{% endif %}{% endfor %}]
-                }, {
-                    name: 'Average',
-                    data: [{% for item in data.month %}[{{ item.priceavg }}]{% if loop.last == false %},{% endif %}{% endfor %}]
-                }]
-            });
-
-        });
-    </script>
-{% endblock %}
-
-{% block blitems %}
-    {% if data.favorites is defined %}
-        <h2>Favorites</h2>
-        <p style="margin-left: 5px" >
-        {% for item in data.favorites %}
-            {% if item.icon_path is null %}
-                <img width="12" height="12" src="/static/img/void.gif" />
-            {% else %}
-                <img width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
-            {% endif %}
-            <a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a>
-            <br />
-        {% endfor %}
-        </p>
-    {% endif %}
-
-    <h2>Trade Portal</h2>
-    <p style="margin-left: 5px" >
-    {% for item in stocks %}
-        {% if item.icon_path is null %}
-            <img width="12" height="12" src="/static/img/void.gif" />
-        {% else %}
-            <img width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
-        {% endif %}
-        <a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a>
-        <br />
-    {% endfor %}
-    </p>
-{% endblock %}
-
-{% block blreceips %}
-    <h2>Market Info</h2>
-    {% if data.receipts.0 is defined %}
-        {% if data.receipts.0.target_qty<1 %}
-            <div class="alert alert-info" role="alert">
-                This item cannot be crafted from other items.
-            </div>
-        {% else %}
-            You can craft
-            {% if data.receipts.0.target_qty > 1 %}
-                {{ data.receipts.0.target_qty }} items
-            {% else %}
-                this item
-            {% endif %}
-            out of other components:
-            <ol>
-                {% for item in data.receipts.0.items %}
-                    <li><a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a> ({{ item.qty }}x)</li>
-                {% endfor %}
-            </ol>
-            {% if data.receipts.0.target_marketvalue > data.receipts.0.target_costs %}
-                <div class="alert alert-success" role="alert">
-            {% else %}
-                <div class="alert alert-danger" role="alert">
-            {% endif %}
-                To buy all required parts at a trade portal you'll have to spent
-                {{ data.receipts.0.target_costs|coins }} coins
-                while buying the item itself will cost
-                {{ data.receipts.0.target_marketvalue|coins }}
-                coins.
-            </div>
-        {% endif %}
-        {% if data.itemusedfor.0 is defined %}
-            The item is used in the production of:
-            <ol>
-                {% for item in data.itemusedfor %}
-                    <li><a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a></li>
-                {% endfor %}
-            </ol>
-        {% endif %}
-    {% else %}
-        <div class="alert alert-warning" role="alert">
-            There are no crafting receipts for this item in the database yet.
-            Please come back later.
-        </div>
-    {% endif %}
-{% endblock %}
-
 {% block blcharts %}
     <h1>
         <script>
@@ -187,6 +59,63 @@
             </div>
         {% endfor %}
     {% endif %}
-
 {% endblock %}
 
+{% block headjs %}
+    <script type="text/javascript">
+        $(function() {
+            sparkvalues = [{% for item in data.hundret %}{{ item.marketvalue }}{% if loop.last == false %},{% endif %}{% endfor %}]
+            $('.hundretsparks').sparkline(sparkvalues);
+
+            $('#twentyfour').highcharts('StockChart', {
+                title : { enabled : false },
+                navigator: { enabled : false },
+                scrollbar: { enabled : false },
+                rangeSelector: { enabled: false },
+                chart: { height: 340 },
+                yAxis: { title: { text: 'Gold Coins' }, opposite: false },
+                series: [{
+                    name: '{{ data.basic.title}}',
+                    data: [{% for item in data.twentyfour %}[{{ item.tstamp }},{{ item.marketvalue }}]{% if loop.last == false %},{% endif %}{% endfor %}],
+                    tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' }
+                }]
+            });
+
+            $('#month').highcharts({
+                title: { text: '{{ data.basic.title}}', },
+                tooltip: { valueDecimals: 4, valueSuffix: ' Gold Coins' },
+                chart: { height: 340 },
+                yAxis: { title: { text: 'Gold Coins' }, },
+                xAxis: {
+                    categories: [{% for item in data.month %}'{{ item.bmdate }}'{% if loop.last == false %},{% endif %}{% endfor %}]
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [{
+                    name: 'Minimum',
+                    data: [{% for item in data.month %}[{{ item.pricemin }}]{% if loop.last == false %},{% endif %}{% endfor %}]
+                }, {
+                    name: 'Maximum',
+                    data: [{% for item in data.month %}[{{ item.pricemax }}]{% if loop.last == false %},{% endif %}{% endfor %}]
+                }, {
+                    name: 'Average',
+                    data: [{% for item in data.month %}[{{ item.priceavg }}]{% if loop.last == false %},{% endif %}{% endfor %}]
+                }]
+            });
+
+        });
+    </script>
+{% endblock %}
+
+{% block blitems %}
+    {% include 'block-favorites.tpl.html' %}
+    {% include 'block-itemlist.tpl.html' %}
+{% endblock %}
+
+{% block blreceips %}
+    {% include 'block-marketinfo.tpl.html' %}
+{% endblock %}

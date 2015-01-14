@@ -1,0 +1,45 @@
+<h2>Market Info</h2>
+{% if data.receipts.0 is defined %}
+    {% if data.receipts.0.target_qty<1 %}
+        <div class="alert alert-info" role="alert">
+            This item cannot be crafted from other items.
+        </div>
+    {% else %}
+        You can craft
+        {% if data.receipts.0.target_qty > 1 %}
+            {{ data.receipts.0.target_qty }} items
+        {% else %}
+            this item
+        {% endif %}
+        out of other components:
+        <ol>
+            {% for item in data.receipts.0.items %}
+                <li><a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a> ({{ item.qty }}x)</li>
+            {% endfor %}
+        </ol>
+        {% if data.receipts.0.target_marketvalue > data.receipts.0.target_costs %}
+            <div class="alert alert-success" role="alert">
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+        {% endif %}
+            To buy all required parts at a trade portal you'll have to spent
+            {{ data.receipts.0.target_costs|coins }} coins
+            while buying the item itself will cost
+            {{ data.receipts.0.target_marketvalue|coins }}
+            coins.
+        </div>
+    {% endif %}
+    {% if data.itemusedfor.0 is defined %}
+        The item is used in the production of:
+        <ol>
+            {% for item in data.itemusedfor %}
+                <li><a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a></li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        There are no crafting receipts for this item in the database yet.
+        Please come back later.
+    </div>
+{% endif %}

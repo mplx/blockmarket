@@ -1,0 +1,12 @@
+<h2>Trade Portal</h2>
+<p style="margin-left: 5px" >
+{% for item in stocks %}
+    {% if item.icon_path is null %}
+        <img width="12" height="12" src="/static/img/void.gif" />
+    {% else %}
+        <img width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
+    {% endif %}
+    <a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a>
+    <br />
+{% endfor %}
+</p>
