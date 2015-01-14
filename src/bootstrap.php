@@ -20,7 +20,7 @@ if (function_exists('date_default_timezone_set') && function_exists('date_defaul
 }
 
 // find config file
-$path_conf = BM_PATH_SRC . '../config.local.php';
+$path_conf = BM_PATH_SRC . '..' . DIRECTORY_SEPARATOR . 'config.local.php';
 if (file_exists($path_conf)) {
     include_once $path_conf;
 }
