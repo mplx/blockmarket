@@ -27,6 +27,44 @@ class UpdateStock
         $data = $this->fetchData(BM_MARKETDATA_URL);
         $result = $this->storeStocks($data);
         $result = $this->storePrices($data);
+        $result = $this->storePricesAvg($data);
+        return true;
+    }
+
+    public function storePricesAvg()
+    {
+        $queries = array();
+        // @codingStandardsIgnoreStart
+        // fill daily avg prices table
+        $queries[] =
+            "SELECT stock_id, DATE(ts) AS day, MAX(marketvalue) AS max_value, MIN(marketvalue) AS min_value, TRUNCATE(AVG(marketvalue),5) AS avg_value " .
+            "FROM prices " .
+            "WHERE (ts > (DATE_SUB(NOW(), INTERVAL 2 DAY)) AND ts < (DATE_SUB(NOW(), INTERVAL 1 DAY))) " .
+            "GROUP BY stock_id";
+
+        $queries[] = "REPLACE INTO prices_avg(stock_id, date, daily_max, daily_min, daily_avg) " .
+                    "SELECT stock_id, DATE(ts) AS day, MAX(marketvalue) AS max_value, MIN(marketvalue) AS min_value, TRUNCATE(AVG(marketvalue),5) AS avg_value " .
+                    "FROM prices " .
+                    "WHERE DATE(ts) = DATE(NOW()) " .
+                    "GROUP BY stock_id";
+            // @codingStandardsIgnoreEnd
+        // execute
+        foreach ($queries as $q) {
+            $result = $this->db->query($q, false);
+        }
+        return true;
+    }
+
+    public function optimize()
+    {
+        $queries = array();
+        // optimize prices table
+        $queries[] = "DELETE FROM prices WHERE (ts < (DATE_SUB(NOW(), INTERVAL 14 DAY)))";
+        $queries[] = "OPTIMIZE TABLE prices";
+        // execute
+        foreach ($queries as $q) {
+            $result = $this->db->query($q, false);
+        }
         return true;
     }
 

@@ -30,6 +30,7 @@ web1:
   after_deploy:
   cron:
     - "1,16,31,46 * * * *": "php bin/update-data.php"
+    - "20 0 * * *":         "php bin/optimize-data.php"
   php_short_open_tag: "0"
   magic_quotes_gpc: Off
   php_date_timezone: "Europe/Berlin"

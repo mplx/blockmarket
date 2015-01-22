@@ -127,13 +127,11 @@ class IndexController extends AbstractMainController
         $data['current']['units'] = $units;
 
         // last month averages
-        $query = "SELECT MAX(marketvalue) AS pricemax, MIN(marketvalue) AS pricemin, " .
-                    "AVG(marketvalue) AS priceavg, date(ts) AS bmdate, " .
-                    "UNIX_TIMESTAMP(date(ts))*1000 AS tstamp " .
-                "FROM prices " .
-                "WHERE stock_id = %d AND date(ts)>=DATE_SUB(NOW(), INTERVAL 1 MONTH) " .
-                "GROUP BY date(ts) " .
-                "ORDER BY ts ASC ";
+        $query = "SELECT daily_max AS pricemax, daily_min AS pricemin, " .
+                "daily_avg AS priceavg, date AS bmdate, UNIX_TIMESTAMP(date)*1000 AS tstamp " .
+                "FROM prices_avg " .
+                "WHERE stock_id = %d AND date>=DATE_SUB(NOW(), INTERVAL 1 MONTH) " .
+                "ORDER BY date ASC";
         $query = sprintf($query, $id);
         $temp = $this->db->query($query);
         $data['month'] = $temp;
