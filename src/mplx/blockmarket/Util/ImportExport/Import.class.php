@@ -27,7 +27,7 @@ class Import
     {
         $this->db = $db;
         $this->compatibility_min = 3;
-        $this->compatibility_max= 3;
+        $this->compatibility_max= 4;
 
         $this->metadata_file = 'export.json';
         $this->stocks_file = null;
