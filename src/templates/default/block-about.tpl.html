@@ -8,11 +8,6 @@
     </strong>.
     Market data is based on the official, cloud wide item rates ("blockmarket");
     prices at your local trade portal may vary.
-    {% if data.config.issues_url is defined and data.config.source_url is defined %}
-            <br />
-            <a title="Open Source" target="_blank" rel="nofollow" href="{{ data.config.source_url }}">Source</a> |
-            <a title="Issue Tracker" target="_blank" rel="nofollow" href="{{ data.config.issues_url }}">Issue Tracker</a>
-    {% endif %}
 </div>
 
 <div>
@@ -25,4 +20,11 @@
     <a href="https://itunes.apple.com/us/app/the-blockheads/id519596406" target="_blank" rel="nofollow">
         <img src="/static/img/appStoreBadge_Apple.png" style="padding:5px;padding-left:0px">
     </a>
+</div>
+
+<div>
+    {% if data.config.issues_url is defined and data.config.source_url is defined %}
+            <a title="Open Source" target="_blank" rel="nofollow" href="{{ data.config.source_url }}">Repository</a> |
+            <a title="Issue Tracker" target="_blank" rel="nofollow" href="{{ data.config.issues_url }}">Issue Tracker</a>
+    {% endif %}
 </div>
