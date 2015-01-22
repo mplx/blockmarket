@@ -1,17 +1,17 @@
 {
-    "schema": "3",
+    "schema": "4",
     "files": [
         {
-			"data": "stocks",
+            "data": "stocks",
             "name": "stocks.json",
             "md5": "40f9fc4a2b7974b0fd907775ca5d856a"
         },
         {
-			"data": "receipts",
+            "data": "receipts",
             "name": "receipts.json",
-            "md5": "9d2d8f955e1f7c86ea4fd1a93e99921c"
+            "md5": "4b53d9e5116b803593266780634bf27e"
         }
     ],
-    "exported": "2015-01-11T10:16:24+00:00",
-    "timestamp": "1420971384"
+    "exported": "2015-01-22T23:25:37+01:00",
+    "timestamp": "1421965537"
 }
