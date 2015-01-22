@@ -115,7 +115,11 @@ class IndexController extends AbstractMainController
         $data['twentyfour'] = $temp;
 
         // market data
-        $data['current']['marketvalue'] = $data['twentyfour'][count($data['twentyfour'])-1]['marketvalue'];
+        if (count($data['twentyfour']) > 0) {
+            $data['current']['marketvalue'] = $data['twentyfour'][count($data['twentyfour'])-1]['marketvalue'];
+        } else {
+            $data['current']['marketvalue'] = 0;
+        }
         $units = 1;
         if ($data['current']['marketvalue']<=0.009999) {
             $units = 100;
