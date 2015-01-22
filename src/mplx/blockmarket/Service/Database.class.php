@@ -156,7 +156,7 @@ class Database
         }
     }
 
-    public function NullToNull($value)
+    public function nullToNull($value)
     {
         if (is_null($value)) {
             return 'null';
