@@ -13,7 +13,7 @@ define('BM_VERSION', '1.0.0');
 define('BM_CURL_TIMEOUT', 10);
 define(
     'BM_CURL_USERAGENT',
-    'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+    'BlockMarketBot/1.0; https://github.com/mplx/blockmarket/'
 );
 
 // blockmarket data
