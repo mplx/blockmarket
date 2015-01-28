@@ -30,7 +30,7 @@ function remStockID(id) {
     }
 
     var json_str = JSON.stringify(arr);
-    setCookie('favorites', json_str, 7);
+    setCookie('favorites', json_str, 14);
 }
 
 function addStockID(id) {
@@ -47,7 +47,7 @@ function addStockID(id) {
     }
 
     var json_str = JSON.stringify(arr);
-    setCookie('favorites', json_str, 7);
+    setCookie('favorites', json_str, 14);
 }
 
 // source: http://www.w3schools.com/js/js_cookies.asp
@@ -68,4 +68,9 @@ function setCookie(cname, cvalue, exdays) {
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
     document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function extendCookie(cname) {
+    var json_str = getCookie(cname);
+    setCookie(cname, json_str, 14);
 }
