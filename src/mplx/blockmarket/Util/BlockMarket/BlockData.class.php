@@ -61,6 +61,31 @@ class BlockData
         return false;
     }
 
+    public function getRandomReceipt()
+    {
+        $query = "SELECT * FROM receipts ORDER BY RAND() LIMIT 0,1";
+        $receipt = $this->db->query($query);
+        if ($receipt) {
+            $collection = array();
+                $collection = array(
+                    'target_id' => $receipt[0]['target_id'],
+                    'target_qty' => $receipt[0]['target_qty'],
+                    'level' => 1,
+                    'items' => array()
+                );
+                for ($j=1; $j <= 5; $j++) {
+                    if ($receipt[0]['ingredient_' . $j . '_id']) {
+                        $collection['items'][$receipt[0]['ingredient_' . $j . '_id']] = array(
+                            'qty' => $receipt[0]['ingredient_' . $j . '_qty']
+                        );
+                    }
+                }
+            return $collection;
+        } else {
+            return false;
+        }
+    }
+
     public function getStockInfo($id)
     {
         if ($id && is_numeric($id)) {

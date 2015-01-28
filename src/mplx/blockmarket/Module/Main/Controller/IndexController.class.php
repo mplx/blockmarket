@@ -41,7 +41,12 @@ class IndexController extends AbstractMainController
 
         // which one?
         if (!isset($_GET['stockid']) || !is_numeric($_GET['stockid'])) {
-            $id = 87;
+            $receipt = $this->data->getRandomReceipt();
+            if (isset($receipt['target_id'])) {
+                $id = $receipt['target_id'];
+            } else {
+                $id = 87;
+            }
         } else {
             $id = $_GET['stockid'];
         }
