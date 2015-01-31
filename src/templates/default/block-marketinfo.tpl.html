@@ -1,5 +1,21 @@
 <div id="receipts">
-    <h2>Market Info</h2>
+    <h2>Stock Info</h2>
+    {% if data.quotation.0 is defined %}
+        <ul style="margin-bottom: 15px;">
+            {% for item in data.quotation %}
+                <li style=" color:{% if item.pxpct < 0 %}red{% else %}green{% endif %};">
+                    {{ "%+3.2f"|format(item.pxpct) }}%
+                    {% if item.pxpct < 0 %}
+                        <i class="fa fa-sort-desc"></i>
+                    {% else %}
+                        <i class="fa fa-sort-asc"></i>
+                    {% endif %}
+                    {{ item.pxchange|coins('short') }}
+                    ({{ item.date }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     {% if data.receipts.0 is defined %}
         {% if data.receipts.0.target_qty<1 %}
             <div class="alert alert-info" role="alert">

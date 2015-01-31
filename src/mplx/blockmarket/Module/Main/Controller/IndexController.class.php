@@ -141,6 +141,43 @@ class IndexController extends AbstractMainController
         $temp = $this->db->query($query);
         $data['month'] = $temp;
 
+        // stock: increase/decrease percentage
+        $query = "
+            SELECT
+                stock_id,
+                DATE_FORMAT(date, '%%Y-%%m-%%d') AS date,
+                daily_avg AS value,
+                pxchange,
+                ROUND(pxpct * 100, 2) AS pxpct
+            FROM (
+                SELECT
+                    CASE WHEN stock_id <> @pxstock_id THEN @pxdaily_avg := null END,
+                    pavg.*,
+                    (ROUND(daily_avg - @pxdaily_avg,5)) AS pxchange,
+                    ((daily_avg - @pxdaily_avg) / @pxdaily_avg) AS pxpct,
+                    (@pxdaily_avg := daily_avg),
+                    (@pxstock_id := stock_id)
+                FROM prices_avg pavg
+                CROSS JOIN
+                    (
+                        SELECT
+                            @pxdaily_avg := null,
+                            @pxstock_id := stock_id
+                        FROM prices_avg joinavg
+                        WHERE stock_id = %d
+                        ORDER BY stock_id, date
+                        LIMIT 0, 1
+                    ) AS a
+              WHERE stock_id = %d
+              ORDER BY stock_id, date) AS b
+            WHERE stock_id = %d
+            ORDER BY date DESC
+            LIMIT 0, 7
+        ";
+        $query = sprintf($query, $id, $id, $id);
+        $temp = $this->db->query($query);
+        $data['quotation'] = $temp;
+
         // receipts
         $receipts = $this->data->getReceipts($id);
         if (is_array($receipts)) {
@@ -199,12 +236,6 @@ class IndexController extends AbstractMainController
             // done
             $data['receipts'] = $receipts;
         }
-
-/*
-echo "<pre>";
-print_r($receipts);
-die();
-*/
 
         // item used in production
         $query = "SELECT s.id_stock AS id, s.title " .
