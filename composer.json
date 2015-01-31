@@ -1,10 +1,13 @@
 {
     "name": "mplx/blockmarket",
-    "description": "Blockmarket Tools",
-    "homepage": "http://blockmarket.copypaste.at/",
+    "description": "TheBlockheads Market Tool",
+    "homepage": "https://github.com/mplx/blockmarket/",
     "require": {
-        "php": ">=5.3.10",
-        "symfony/http-foundation": "2.4.*",
-        "twig/twig": "1.*"
+        "php":                      ">=5.3.10",
+        "ext-curl":                 "*",
+        "ext-json":                 "*",
+        "ext-pdo_mysql":            "*",
+        "symfony/http-foundation":  "2.4.*",
+        "twig/twig":                "1.*"
     }
 }
