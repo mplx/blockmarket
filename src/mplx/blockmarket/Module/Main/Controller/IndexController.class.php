@@ -178,6 +178,22 @@ class IndexController extends AbstractMainController
         $temp = $this->db->query($query);
         $data['quotation'] = $temp;
 
+        // trend: best/worst performace in 1 week (with daily avg > 1 gold coin)
+        $query = "
+            SELECT
+                stock_id,
+                title,
+                daily_avg AS avg_day1,
+                (SELECT daily_avg FROM prices_avg day2 WHERE day2.stock_id=day1.stock_id AND date=date(NOW() - INTERVAL 1 WEEK)) AS avg_day2
+            FROM prices_avg day1, stocks
+            WHERE id_stock=stock_id AND daily_avg>1 AND date=DATE(NOW() - INTERVAL 1 DAY)
+            ORDER BY (100/avg_day1*avg_day2)
+        ";
+        $temp = $this->db->query($query . ' ASC LIMIT 0,5');
+        $data['trend1wplus'] = $temp;
+        $temp = $this->db->query($query . ' DESC LIMIT 0,5');
+        $data['trend1wminus'] = $temp;
+
         // receipts
         $receipts = $this->data->getReceipts($id);
         if (is_array($receipts)) {

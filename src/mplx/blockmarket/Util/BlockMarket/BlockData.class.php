@@ -27,7 +27,6 @@ class BlockData
         } else {
             $query = "SELECT id_stock, title, icon_path FROM stocks WHERE enabled=1 ORDER BY title ASC";
         }
-
         return $this->db->query($query);
     }
 

@@ -1,0 +1,31 @@
+<div id="receipts">
+    <h2>Market Trends</h2>
+
+    <h3>Best Weekly</h3>
+    <ul style="list-style-type: none; padding-left: 5px; color: green">
+    {% for item in data.trend1wplus %}
+        <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
+            {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            <i class="fa fa-sort-asc"></i>
+            <a href="?module=index&action=stock&stockid={{ item.stock_id }}">
+                {{ item.title }}
+            </a>
+            ({{ item.avg_day1|coins('short') }})
+        </li>
+    {% endfor %}
+    </ul>
+
+    <h3>Worst Weekly</h3>
+    <ul style="list-style-type: none; padding-left: 5px; color: red">
+    {% for item in data.trend1wminus %}
+        <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
+            {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            <i class="fa fa-sort-desc"></i>
+            <a href="?module=index&action=stock&stockid={{ item.stock_id }}">
+                {{ item.title }}
+            </a>
+            ({{ item.avg_day1|coins('short') }})
+        </li>
+    {% endfor %}
+    </ul>
+</div>
