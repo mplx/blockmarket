@@ -5,7 +5,7 @@
         <script>
             writeAddRemove({{ data.basic.id_stock }});
         </script>
-        {{ data.basic.title}}
+        {{ data.basic.title }}
         <span class="hundretsparks">Loading...</span>
         {% if data.basic.url.icon is defined %}
             <img width="40" height="40" src="{{ data.basic.url.icon }}" />
@@ -14,7 +14,7 @@
 
     <p>
         <strong>Marketvalue</strong>:
-        {{ data.current.marketvalue}}
+        {{ data.current.marketvalue }}
         <strong>Coins</strong>:
         {% if data.current.units <= 1 %}
             {{ data.current.marketvalue|coins}}
@@ -118,6 +118,7 @@
 
 {% block blreceips %}
     {% include 'block-marketinfo.tpl.html' %}
+    {% include 'block-markettrends.tpl.html' %}
 {% endblock %}
 
 {% block blabout %}
