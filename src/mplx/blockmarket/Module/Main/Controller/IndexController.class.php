@@ -184,7 +184,11 @@ class IndexController extends AbstractMainController
                 stock_id,
                 title,
                 daily_avg AS avg_day1,
-                (SELECT daily_avg FROM prices_avg day2 WHERE day2.stock_id=day1.stock_id AND date=date(NOW() - INTERVAL 1 WEEK)) AS avg_day2
+                (
+                 SELECT daily_avg
+                 FROM prices_avg day2
+                 WHERE day2.stock_id=day1.stock_id AND date=date(NOW() - INTERVAL 1 WEEK)
+                ) AS avg_day2
             FROM prices_avg day1, stocks
             WHERE id_stock=stock_id AND daily_avg>1 AND date=DATE(NOW() - INTERVAL 1 DAY)
             ORDER BY (100/avg_day1*avg_day2)

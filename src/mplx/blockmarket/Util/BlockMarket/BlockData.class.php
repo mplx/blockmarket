@@ -79,7 +79,7 @@ class BlockData
                         );
                     }
                 }
-            return $collection;
+                return $collection;
         } else {
             return false;
         }
