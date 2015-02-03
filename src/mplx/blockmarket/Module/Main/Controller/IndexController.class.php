@@ -179,7 +179,7 @@ class IndexController extends AbstractMainController
         $data['quotation'] = $temp;
 
         // trend: best/worst performace in 1 week (with daily avg > 1 gold coin)
-        $query = "
+        $querytpl = "
             SELECT
                 stock_id,
                 title,
@@ -187,16 +187,28 @@ class IndexController extends AbstractMainController
                 (
                  SELECT daily_avg
                  FROM prices_avg day2
-                 WHERE day2.stock_id=day1.stock_id AND date=date(NOW() - INTERVAL 1 WEEK)
+                 WHERE day2.stock_id=day1.stock_id AND date=date(NOW() - INTERVAL %d WEEK)
                 ) AS avg_day2
             FROM prices_avg day1, stocks
             WHERE id_stock=stock_id AND daily_avg>1 AND date=DATE(NOW() - INTERVAL 1 DAY)
-            ORDER BY (100/avg_day1*avg_day2)
+            ORDER BY (100/avg_day1*avg_day2) %s
         ";
-        $temp = $this->db->query($query . ' ASC LIMIT 0,5');
+
+        $query = sprintf($querytpl, 1, ' ASC LIMIT 0,5');
+        $temp = $this->db->query($query);
         $data['trend1wplus'] = $temp;
-        $temp = $this->db->query($query . ' DESC LIMIT 0,5');
+
+        $query = sprintf($querytpl, 1, ' DESC LIMIT 0,5');
+        $temp = $this->db->query($query);
         $data['trend1wminus'] = $temp;
+
+        $query = sprintf($querytpl, 3, ' ASC LIMIT 0,5');
+        $temp = $this->db->query($query);
+        $data['trend4wplus'] = $temp;
+
+        $query = sprintf($querytpl, 3, ' DESC LIMIT 0,5');
+        $temp = $this->db->query($query);
+        $data['trend4wminus'] = $temp;
 
         // receipts
         $receipts = $this->data->getReceipts($id);
