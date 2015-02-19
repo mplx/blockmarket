@@ -40,7 +40,9 @@ class IndexController extends AbstractMainController
         $data = array();
 
         // which one?
-        if (!isset($_GET['stockid']) || !is_numeric($_GET['stockid'])) {
+        if (isset($_SERVER['REQUEST_URI']) && preg_match(BM_PRETTYURL, $_SERVER['REQUEST_URI'], $requesturi)) {
+            $id = $this->data->getStockId(urldecode($requesturi[3]));
+        } elseif (!isset($_GET['stockid']) || !is_numeric($_GET['stockid'])) {
             $receipt = $this->data->getRandomReceipt();
             if (isset($receipt['target_id'])) {
                 $id = $receipt['target_id'];
@@ -280,6 +282,12 @@ class IndexController extends AbstractMainController
         $query = sprintf($query, $id, $id, $id, $id, $id, $id);
         $temp = $this->db->query($query);
         $data['itemusedfor'] = $temp;
+
+        // canonical url
+        $data['canonical'] =
+            'http://' .
+            $_SERVER['SERVER_NAME'] .
+            '/index/stock/' . urlencode(strtolower($data['basic']['title'])) . '/';
 
         // render template
         return $this->twig->render(

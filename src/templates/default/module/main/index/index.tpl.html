@@ -44,7 +44,7 @@
                 <p>
                     {% for item in receipt.items %}
                         {{ item.qty }}
-                        <a href="?module=index&action=stock&stockid={{ item.id }}">{{ item.title }}</a> =
+                        <a href="/index/stock/{{ item.title|lower|url_encode }}">{{ item.title }}</a> =
                         {{ item.qty }} x {{ item.marketvalue }} = {{ item.qty * item.marketvalue }}<br />
                     {% endfor %}
                     <br />

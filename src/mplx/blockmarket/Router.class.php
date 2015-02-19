@@ -49,8 +49,16 @@ class Router
 
     public function run()
     {
-        $module = $this->services['web']->getRequestGet('module', $this->default_module);
-        $action = $this->services['web']->getRequestGet('action', null);
+        if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
+            $module = $this->default_module;
+            $action = null;
+        } elseif (isset($_SERVER['REQUEST_URI']) && preg_match(BM_PRETTYURL, $_SERVER['REQUEST_URI'], $requesturi)) {
+            $module = $requesturi[1];
+            $action = $requesturi[2];
+        } else {
+            $module = $this->services['web']->getRequestGet('module', $this->default_module);
+            $action = $this->services['web']->getRequestGet('action', null);
+        }
 
         $controller = $this->getController($module);
         $response = $controller->initialize($action);

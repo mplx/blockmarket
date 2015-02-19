@@ -6,7 +6,7 @@
     {% else %}
         <img width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
     {% endif %}
-    <a href="?module=index&action=stock&stockid={{ item.id_stock }}">{{ item.title }}</a>
+    <a href="/index/stock/{{ item.title|lower|url_encode }}/">{{ item.title }}</a>
     <br />
 {% endfor %}
 </p>

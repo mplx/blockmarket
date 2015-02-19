@@ -7,7 +7,7 @@
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
             {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
             <i class="fa fa-sort-asc"></i>
-            <a href="?module=index&action=stock&stockid={{ item.stock_id }}">
+            <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
             </a>
             ({{ item.avg_day1|coins('short') }})
@@ -21,7 +21,7 @@
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
             {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
             <i class="fa fa-sort-desc"></i>
-            <a href="?module=index&action=stock&stockid={{ item.stock_id }}">
+            <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
             </a>
             ({{ item.avg_day1|coins('short') }})
@@ -35,7 +35,7 @@
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
             {{ "%+07.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
             <i class="fa fa-sort-asc"></i>
-            <a href="?module=index&action=stock&stockid={{ item.stock_id }}">
+            <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
             </a>
             ({{ item.avg_day1|coins('short') }})
@@ -49,7 +49,7 @@
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
             {{ "%+07.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
             <i class="fa fa-sort-desc"></i>
-            <a href="?module=index&action=stock&stockid={{ item.stock_id }}">
+            <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
             </a>
             ({{ item.avg_day1|coins('short') }})
