@@ -8,8 +8,9 @@
 /bin/echo "Europe/Berlin" | /usr/bin/tee /etc/timezone
 /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
 
-# php
-/usr/bin/apt-get install -y php5 php5-sqlite
+# php, curl
+/usr/bin/apt-get install -y php5 php5-json
+/usr/bin/apt-get install -y curl php5-curl
 
 # mysql
 /usr/bin/debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password root'
@@ -19,6 +20,9 @@
 /usr/bin/mysql -uroot -proot -e "create database blockmarketdb;"
 /bin/sed -i 's/bind-address/#bind-address/g' /etc/mysql/my.cnf
 /usr/sbin/service mysql restart
+
+# composer
+/usr/bin/curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # apache
 /usr/bin/apt-get install -y apache2
