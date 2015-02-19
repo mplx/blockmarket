@@ -17,9 +17,27 @@ class BlockData
         $this->db = $db;
     }
 
+    public function getStockId($stock = null)
+    {
+        if ($stock) {
+            $query = sprintf(
+                "SELECT id_stock, title, title_wiki, icon_path FROM stocks WHERE title = '%s'",
+                $stock
+            );
+            $result = $this->db->query($query);
+            if (isset($result[0]['id_stock'])) {
+                return $result[0]['id_stock'];
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public function getStocks($id = null)
     {
-        if ($id) {
+        if ($id !== null) {
             $query = sprintf(
                 "SELECT id_stock, title, title_wiki, icon_path FROM stocks WHERE id_stock = %d",
                 $id
