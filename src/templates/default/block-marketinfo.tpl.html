@@ -47,18 +47,19 @@
                 coins.
             </div>
         {% endif %}
-        {% if data.itemusedfor.0 is defined %}
-            The item is used in the production of:
-            <ol>
-                {% for item in data.itemusedfor %}
-                    <li><a href="/index/stock/{{ item.title|lower|url_encode }}/">{{ item.title }}</a></li>
-                {% endfor %}
-            </ol>
-        {% endif %}
     {% else %}
         <div class="alert alert-warning" role="alert">
             There are no crafting receipts for this item in the database yet.
             Please come back later.
         </div>
+    {% endif %}
+
+    {% if data.itemusedfor.0 is defined %}
+        The item is used in the production of:
+        <ol>
+            {% for item in data.itemusedfor %}
+                <li><a href="/index/stock/{{ item.title|lower|url_encode }}/">{{ item.title }}</a></li>
+            {% endfor %}
+        </ol>
     {% endif %}
 </div>
