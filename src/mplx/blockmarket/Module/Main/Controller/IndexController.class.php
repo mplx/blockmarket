@@ -328,6 +328,11 @@ class IndexController extends AbstractMainController
             $_SERVER['SERVER_NAME'] .
             '/index/stock/' . urlencode(strtolower($data['basic']['title'])) . '/';
 
+        // google analytics
+        if (defined('GOOGLE_ANALYTICS_ID')) {
+            $data['googleanalyticsid'] = GOOGLE_ANALYTICS_ID;
+        }
+
         // render template
         return $this->twig->render(
             'module/main/index/index.tpl.html',
