@@ -5,7 +5,11 @@
     <ul style="list-style-type: none; padding-left: 5px; color: green">
     {% for item in data.trend1wplus %}
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
-            {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {% if item.avg_day2 * item.avg_day1 != 0 %}
+                {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {% else %}
+                ????
+            {% endif %}
             <i class="fa fa-sort-asc"></i>
             <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
@@ -19,7 +23,11 @@
     <ul style="list-style-type: none; padding-left: 5px; color: red">
     {% for item in data.trend1wminus %}
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
-            {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {% if item.avg_day2 * item.avg_day1 != 0 %}
+                {{ "%+06.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {% else %}
+                ????
+            {% endif %}
             <i class="fa fa-sort-desc"></i>
             <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
@@ -33,7 +41,11 @@
     <ul style="list-style-type: none; padding-left: 5px; color: green">
     {% for item in data.trend4wplus %}
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
-            {{ "%+07.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {% if item.avg_day2 * item.avg_day1 != 0 %}
+                {{ "%+07.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {% else %}
+                ????
+            {% endif %}
             <i class="fa fa-sort-asc"></i>
             <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
@@ -47,7 +59,11 @@
     <ul style="list-style-type: none; padding-left: 5px; color: red">
     {% for item in data.trend4wminus %}
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
-            {{ "%+07.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {%if item.avg_day2 * item.avg_day1 %}
+                {{ "%+07.2f"|format(100 / item.avg_day2 * item.avg_day1 - 100) }}%
+            {% else %}
+                ????
+            {% endif %}
             <i class="fa fa-sort-desc"></i>
             <a href="/index/stock/{{ item.title|lower|url_encode }}/">
                 {{ item.title }}
