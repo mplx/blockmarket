@@ -22,8 +22,8 @@ class IndexController extends AbstractMainController
         parent::__construct($db, $twig, $web);
 
         $this->setActions(
-            array('index', 'stock'),
-            'stock'
+            array('index', 'stock', 'sitemap'),
+            'index'
         );
 
         $this->data = new BlockMarket\BlockData($db);
@@ -31,7 +31,46 @@ class IndexController extends AbstractMainController
 
     protected function executeIndex()
     {
-        return $this->twig->render('error.tpl.html');
+        if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
+            return $this->executeStock();
+        } else {
+            return $this->twig->render('error.tpl.html');
+        }
+    }
+
+    protected function executeSitemap()
+    {
+        if (isset($_SERVER['REQUEST_URI']) && preg_match(BM_PRETTYURL, $_SERVER['REQUEST_URI'], $requesturi)) {
+            $format = $requesturi[3];
+        } else {
+            $format = 'txt';
+        }
+
+        $stocks = $this->data->getStocks();
+
+        switch ($format) {
+            case 'txt':
+                return $this->twig->render(
+                    'module/main/index/sitemap_txt.tpl.html',
+                    array(
+                        'uri' => 'http://' . $_SERVER['SERVER_NAME'],
+                        'stocks' => $this->data->getStocks()
+                    )
+                );
+                break;
+            case 'xml':
+                return $this->twig->render(
+                    'module/main/index/sitemap_xml.tpl.html',
+                    array(
+                        'uri' => 'http://' . $_SERVER['SERVER_NAME'],
+                        'stocks' => $this->data->getStocks()
+                    )
+                );
+                break;
+            case 'json':
+            default:
+                return $this->twig->render('error.tpl.html');
+        }
     }
 
     protected function executeStock()

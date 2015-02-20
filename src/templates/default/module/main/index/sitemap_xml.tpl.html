@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>{{ uri }}/</loc>
+        <changefreq>hourly</changefreq>
+    </url>
+{% for item in stocks %}
+    <url>
+        <loc>{{ uri }}/index/stock/{{ item.title|lower|url_encode }}/</loc>
+        <changefreq>hourly</changefreq>
+    </url>
+{% endfor %}
+</urlset>

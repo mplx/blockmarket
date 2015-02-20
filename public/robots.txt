@@ -1,0 +1,3 @@
+# do not crawl this...
+User-agent: *
+Disallow: /static/
