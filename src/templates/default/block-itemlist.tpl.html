@@ -1,12 +1,15 @@
 <h2>Trade Portal</h2>
-<p style="margin-left: 5px" >
+
+<div itemtype="http://schema.org/ItemList" style="margin-left: 5px">
 {% for item in stocks %}
+    <div itemprop="itemListElement" itemscope="" itemtype="http://schema.org/Product">
     {% if item.icon_path is null %}
         <img width="12" height="12" src="/static/img/void.gif" />
     {% else %}
-        <img width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
+        <img itemprop="image" width="12" height="12" src="{{ data.config.wiki_url }}{{ item.icon_path }}" />
     {% endif %}
-    <a href="/index/stock/{{ item.title|lower|url_encode }}/">{{ item.title }}</a>
+    <a itemprop="url" href="/index/stock/{{ item.title|lower|url_encode }}/"><span itemprop="name">{{ item.title }}</span></a>
     <br />
+    </div>
 {% endfor %}
-</p>
+</div>
