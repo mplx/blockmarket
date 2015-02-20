@@ -243,11 +243,11 @@ class IndexController extends AbstractMainController
         $temp = $this->db->query($query);
         $data['trend1wminus'] = $temp;
 
-        $query = sprintf($querytpl, 3, ' ASC LIMIT 0,5');
+        $query = sprintf($querytpl, 4, ' ASC LIMIT 0,5');
         $temp = $this->db->query($query);
         $data['trend4wplus'] = $temp;
 
-        $query = sprintf($querytpl, 3, ' DESC LIMIT 0,5');
+        $query = sprintf($querytpl, 4, ' DESC LIMIT 0,5');
         $temp = $this->db->query($query);
         $data['trend4wminus'] = $temp;
 

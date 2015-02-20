@@ -29,7 +29,7 @@
     {% endfor %}
     </ul>
 
-    <h3>Best Monthly (3w)</h3>
+    <h3>Best Monthly</h3>
     <ul style="list-style-type: none; padding-left: 5px; color: green">
     {% for item in data.trend4wplus %}
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
@@ -43,7 +43,7 @@
     {% endfor %}
     </ul>
 
-    <h3>Worst Monthly (3w)</h3>
+    <h3>Worst Monthly</h3>
     <ul style="list-style-type: none; padding-left: 5px; color: red">
     {% for item in data.trend4wminus %}
         <li title="{{ item.avg_day1|coins('short') }} :: {{ item.avg_day2|coins('short') }}">
