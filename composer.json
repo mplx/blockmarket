@@ -9,5 +9,9 @@
         "ext-pdo_mysql":            "*",
         "symfony/http-foundation":  "2.4.*",
         "twig/twig":                "1.*"
+    },
+    "require-dev": {
+        "symfony/var-dumper":       "*",
+        "sami/sami":                "3.0.*"
     }
 }
