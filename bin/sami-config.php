@@ -16,7 +16,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Sami\Sami;
 use Symfony\Component\Finder\Finder;
-use Sami\Version\GitVersionCollection;
 
 $dir = __DIR__ . '/../src';
 
@@ -25,15 +24,11 @@ $iterator = Finder::create()
     ->name('*.php')
     ->in($dir);
 
-$versions = GitVersionCollection::create($dir)
-    ->add('master', 'Blockmarket Dev');
-
 $result = new Sami($iterator, array(
     'title' => 'Blockmarket',
-    'versions' => $versions,
-    'build_dir' => __DIR__ . '/../docs/build/%version%',
-    'cache_dir' => __DIR__ . '/../docs/cache/%version%',
-    'default_opened_level' => 2,
+    'build_dir' => __DIR__ . '/../docs/build/',
+    'cache_dir' => __DIR__ . '/../docs/cache/',
+    'default_opened_level' => 3,
 ));
 
 return $result;
