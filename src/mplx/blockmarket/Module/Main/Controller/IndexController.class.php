@@ -13,10 +13,18 @@ use mplx\blockmarket\Service\Web;
 
 use mplx\blockmarket\Util\BlockMarket;
 
+/**
+* IndexController
+*/
 class IndexController extends AbstractMainController
 {
     protected $data;
 
+    /**
+    * {@inheritdoc}
+    *
+    * Actions: index, stock, sitemap
+    */
     public function __construct(Database $db, \Twig_Environment $twig, Web $web)
     {
         parent::__construct($db, $twig, $web);
@@ -29,6 +37,9 @@ class IndexController extends AbstractMainController
         $this->data = new BlockMarket\BlockData($db);
     }
 
+    /**
+    * Action: index (default action)
+    */
     protected function executeIndex()
     {
         if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
@@ -38,6 +49,9 @@ class IndexController extends AbstractMainController
         }
     }
 
+    /**
+    * Action: generate txt+xml sitemap
+    */
     protected function executeSitemap()
     {
         if (isset($_SERVER['REQUEST_URI']) && preg_match(BM_PRETTYURL, $_SERVER['REQUEST_URI'], $requesturi)) {
@@ -73,6 +87,9 @@ class IndexController extends AbstractMainController
         }
     }
 
+    /**
+    * Action: display stock data
+    */
     protected function executeStock()
     {
         // initialize

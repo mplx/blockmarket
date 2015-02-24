@@ -8,8 +8,19 @@
 
 namespace mplx\blockmarket\Service;
 
+/**
+* Web service
+*/
 class Web
 {
+
+    /**
+    * Get HTTP cookie
+    *
+    * @param string $key
+    * @param mixed $alt
+    * @return mixed
+    */
     public static function getCookie($key, $alt = false)
     {
         if (isset($_COOKIE[$key])) {
@@ -19,6 +30,13 @@ class Web
         }
     }
 
+    /**
+    * Get HTTP GET request
+    *
+    * @param string $key
+    * @param mixed $alt
+    * @return mixed
+    */
     public static function getRequestGet($key, $alt = false)
     {
         if (isset($_GET[$key])) {
@@ -28,6 +46,13 @@ class Web
         }
     }
 
+    /**
+    * Get HTTP POST request
+    *
+    * @param string $key
+    * @param mixed $alt
+    * @return mixed
+    */
     public static function getRequestPost($key, $alt = false)
     {
         if (isset($_POST[$key])) {
@@ -37,6 +62,16 @@ class Web
         }
     }
 
+    /**
+    * Get URL
+    *
+    * @param string $url
+    * @param bool $header
+    * @param bool $body
+    * @param int $timeout
+    * @param string $useragent
+    * @return mixed
+    */
     public static function getUrl($url, $header = false, $body = true, $timeout = null, $useragent = null)
     {
         $timeout = $timeout == null ? BM_CURL_TIMEOUT : intval($timeout);

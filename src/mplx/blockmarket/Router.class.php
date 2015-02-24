@@ -10,19 +10,46 @@ namespace mplx\blockmarket;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+* Router: opens controller and initializes modules
+*/
 class Router
 {
-    protected $map = array();
-    protected $services = array();
+    /**
+    * Default module
+    *
+    * @var string $default_module
+    */
     public $default_module;
 
+    /**
+    * List of available controllers
+    *
+    * @var array $map
+    */
+    protected $map = array();
+
+    /**
+    * List of available services
+    *
+    * @var array $services
+    */
+    protected $services = array();
+
+    /**
+    * Constructor
+    */
     public function __construct()
     {
         global $db;
 
+        // Default module
         $this->default_module = 'index';
+
+        // Databasebase service
         $this->services['db'] = $db;
 
+        // Template engine
         $loader = new \Twig_Loader_Filesystem(BM_PATH_TPL . BM_THEME);
         $this->services['twig'] = new \Twig_Environment($loader);
         if (BM_DEBUG) {
@@ -32,14 +59,21 @@ class Router
         $filter = new \Twig_SimpleFilter('coins', '\mplx\blockmarket\Util\BlockMarket\BlockUtil::toCoinsString');
         $this->services['twig']->addFilter($filter);
 
+        // Web service
         $this->services['web'] = new \mplx\blockmarket\Service\Web();
 
+        // Controller map
         $modules = $this->getModules();
         foreach ($modules as $id => $module) {
             $this->map[$id] = $module->getControllers();
         }
     }
 
+    /**
+    * Get available modules
+    *
+    * @return array
+    */
     public function getModules()
     {
         return array(
@@ -47,6 +81,11 @@ class Router
         );
     }
 
+    /**
+    * Run
+    *
+    * @throws \LogicException
+    */
     public function run()
     {
         if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
@@ -68,6 +107,14 @@ class Router
         $response->send();
     }
 
+    /**
+    * Get instance of controller
+    *
+    * @param string $mod
+    * @return \mplx\blockmarket\Module\ControllerInterface
+    * @throws \InvalidArgumentException
+    * @throws \Exception
+    */
     public function getController($mod)
     {
         $controller = $this->getControllerClass($mod);
@@ -81,6 +128,12 @@ class Router
         return $controller;
     }
 
+    /**
+    * Get classname of controller
+    *
+    * @param string $mod
+    * @return string|false
+    */
     protected function getControllerClass($mod)
     {
         if (strpos($mod, '_') !== false) {

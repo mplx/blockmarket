@@ -8,8 +8,17 @@
 
 namespace mplx\blockmarket\Util\BlockMarket;
 
+/**
+* Blockmarket utilities
+*/
 class BlockUtil
 {
+    /**
+    * Convert amount to coins (array)
+    *
+    * @param mixed $sum
+    * @return array
+    */
     public static function toCoinsArray($sum)
     {
         $platinum = floor($sum / 100);
@@ -23,6 +32,13 @@ class BlockUtil
         );
     }
 
+    /**
+    * Convert amount to coins (string)
+    *
+    * @param mixed $sum
+    * @param string $format
+    * @return string
+    */
     public static function toCoinsString($sum, $format = 'long')
     {
         $txt = self::toCoinsArray(abs($sum));

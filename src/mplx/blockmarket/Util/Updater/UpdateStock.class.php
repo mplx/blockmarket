@@ -11,17 +11,42 @@ namespace mplx\blockmarket\Util\Updater;
 use mplx\blockmarket\Service\Database;
 use mplx\blockmarket\Service\Web;
 
+/**
+* Update stock data
+*/
 class UpdateStock
 {
+    /**
+    * Database connection
+    *
+    * @var \mplx\blockmarket\Service\Database
+    */
     protected $db;
+
+    /**
+    * Web service
+    *
+    * @var \mplx\blockmarket\Service\Web
+    */
     protected $web;
 
+    /**
+    * Constructor
+    *
+    * @param \mplx\blockmarket\Service\Database $db
+    * @param \mplx\blockmarket\Service\Web $web
+    */
     public function __construct(Database $db, Web $web)
     {
         $this->db = $db;
         $this->web = $web;
     }
 
+    /**
+    * Run stock item updates
+    *
+    * @return true
+    */
     public function run()
     {
         $data = $this->fetchData(BM_MARKETDATA_URL);
@@ -31,11 +56,15 @@ class UpdateStock
         return true;
     }
 
+    /**
+    * Calculate and store daily avg prices
+    *
+    * @return true
+    */
     public function storePricesAvg()
     {
         $queries = array();
         // @codingStandardsIgnoreStart
-        // fill daily avg prices table
         $queries[] =
             "SELECT stock_id, DATE(ts) AS day, MAX(marketvalue) AS max_value, MIN(marketvalue) AS min_value, TRUNCATE(AVG(marketvalue),5) AS avg_value " .
             "FROM prices " .
@@ -55,6 +84,11 @@ class UpdateStock
         return true;
     }
 
+    /**
+    * Reduce prices and optimize database table
+    *
+    * @return true
+    */
     public function optimize()
     {
         $queries = array();
@@ -68,6 +102,12 @@ class UpdateStock
         return true;
     }
 
+    /**
+    * Fetch items and prices from website
+    *
+    * @param string $target
+    * @return array
+    */
     private function fetchData($target)
     {
         $timestamp = date('Y-m-d G:i:s');
@@ -85,6 +125,12 @@ class UpdateStock
         return $stocks;
     }
 
+    /**
+    * Store fetched items into database
+    *
+    * @param array $data
+    * @return true
+    */
     private function storeStocks($data)
     {
         $fields = array(
@@ -126,6 +172,12 @@ class UpdateStock
         return true;
     }
 
+    /**
+    * Store fetched prices into database
+    *
+    * @param array $data
+    * @return true
+    */
     private function storePrices($data)
     {
         $queries = array();

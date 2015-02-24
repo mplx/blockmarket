@@ -10,19 +10,72 @@ namespace mplx\blockmarket\Util\ImportExport;
 
 use mplx\blockmarket\Service\Database;
 
+/**
+* Basic stock data import
+*/
 class Import
 {
+    /**
+    * Database connection
+    *
+    * @var \mplx\blockmarket\Service\Database
+    */
     protected $db;
 
+    /**
+    * Minimum importer compatibility
+    *
+    * @var int
+    */
     protected $compatibility_min;
+
+    /**
+    * Maximum importer compatibility
+    *
+    * @var int
+    */
     protected $compatibility_max;
 
+    /**
+    * Import filename: meta data
+    *
+    * @var string
+    */
     protected $metadata_file;
+
+    /**
+    * Import filename: stocks
+    *
+    * @var string
+    */
     protected $stocks_file;
+
+    /**
+    * Import checksum: stocks
+    *
+    * @var string
+    */
     protected $stocks_hash;
+
+    /**
+    * Import filename: receipts
+    *
+    * @var string
+    */
     protected $receipts_file;
+
+    /**
+    * Import checksum: receipts
+    *
+    * @var string
+    */
     protected $receipts_hash;
 
+    /**
+    * Constructor
+    *
+    * @param \mplx\blockmarket\Service\Database $db
+    */
     public function __construct(Database $db)
     {
         $this->db = $db;
@@ -34,6 +87,13 @@ class Import
         $this->receipts_file = null;
     }
 
+    /**
+    * Import data (JSON)
+    *
+    * @param string $path
+    * @param string $hashcheck
+    * @return true
+    */
     public function run($path, $hashcheck = true)
     {
         $queries = array();

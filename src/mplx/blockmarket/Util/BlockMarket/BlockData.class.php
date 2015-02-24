@@ -8,15 +8,34 @@
 
 namespace mplx\blockmarket\Util\BlockMarket;
 
+/**
+* Blockmarket data
+*/
 class BlockData
 {
+    /**
+    * Database connection
+    *
+    * @var \PDO
+    */
     protected $db;
 
+    /**
+    * Constructor
+    *
+    * @param \PDO $db
+    */
     public function __construct($db)
     {
         $this->db = $db;
     }
 
+    /**
+    * Get ID from stock title
+    *
+    * @param string $stock
+    * @return int|false
+    */
     public function getStockId($stock = null)
     {
         if ($stock) {
@@ -35,6 +54,12 @@ class BlockData
         }
     }
 
+    /**
+    * Get list of all or specific stock
+    *
+    * @param int $id
+    * @return \PDOStatement
+    */
     public function getStocks($id = null)
     {
         if ($id !== null) {
@@ -48,6 +73,12 @@ class BlockData
         return $this->db->query($query);
     }
 
+    /**
+    * Get receipts for item
+    *
+    * @param int $id
+    * @return array|false
+    */
     public function getReceipts($id)
     {
         if ($id && is_numeric($id)) {
@@ -78,6 +109,11 @@ class BlockData
         return false;
     }
 
+    /**
+    * Get random receipt
+    *
+    * @return array|false
+    */
     public function getRandomReceipt()
     {
         $query = "SELECT * FROM receipts ORDER BY RAND() LIMIT 0,1";
@@ -103,6 +139,12 @@ class BlockData
         }
     }
 
+    /**
+    * Get current marketvalue for specified stock item
+    *
+    * @param int $id
+    * @return \PDOStatement|false
+    */
     public function getStockInfo($id)
     {
         if ($id && is_numeric($id)) {

@@ -10,15 +10,33 @@ namespace mplx\blockmarket\Util\Migrations;
 
 use mplx\blockmarket\Service\Database;
 
+/**
+* Database migrations
+*/
 class Migrate
 {
+    /**
+    * Database connection
+    *
+    * @var \mplx\blockmarket\Service\Database
+    */
     protected $db;
 
+    /**
+    * Constructor
+    *
+    * @param \mplx\blockmarket\Service\Database $db
+    */
     public function __construct(Database $db)
     {
         $this->db = $db;
     }
 
+    /**
+    * Run database migrations
+    *
+    * @return true
+    */
     public function run()
     {
         // check: db connection, schema
@@ -53,11 +71,21 @@ class Migrate
         return true;
     }
 
+    /**
+    * Check if schema exists
+    *
+    * @return \PDOStatement
+    */
     private function dbExists()
     {
         return $this->db->tableExists('config');
     }
 
+    /**
+    * Create database schema
+    *
+    * @return true
+    */
     private function createSchema()
     {
         $queries=array();
@@ -74,16 +102,32 @@ class Migrate
         return true;
     }
 
+    /**
+    * Get database schema version
+    *
+    * @return int
+    */
     private function getSchema()
     {
         return $this->db->getConf('schema');
     }
 
+    /**
+    * Set database schema version
+    *
+    * @param int $value
+    * @return int
+    */
     private function setSchema($value)
     {
         return $this->db->setConf('schema', $value);
     }
 
+    /**
+    * Upgrade database schema to version 2
+    *
+    * @return true
+    */
     private function upgradeDatabase002()
     {
         $queries=array();
@@ -99,6 +143,12 @@ class Migrate
         }
         return true;
     }
+
+    /**
+    * Upgrade database schema to version 3
+    *
+    * @return true
+    */
 
     private function upgradeDatabase003()
     {
@@ -130,6 +180,11 @@ class Migrate
         return true;
     }
 
+    /**
+    * Upgrade database schema to version 4
+    *
+    * @return true
+    */
     private function upgradeDatabase004()
     {
         $queries=array();

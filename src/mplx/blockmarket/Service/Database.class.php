@@ -8,20 +8,83 @@
 
 namespace mplx\blockmarket\Service;
 
+/**
+* Database service
+*/
 class Database
 {
+    /**
+    * PDO Object
+    *
+    * @var \PDO
+    */
     protected $pdo;
 
+    /**
+    * Database host (FQDN)
+    *
+    * @var string $db_host
+    */
     protected $db_host;
+
+    /**
+    * Database name
+    *
+    * @var string $db_name
+    */
     protected $db_name;
+
+    /**
+    * Database username
+    *
+    * @var string $db_user
+    */
     protected $db_user;
+
+    /**
+    * Database password
+    *
+    * @var string $db_pass
+    */
     protected $db_pass;
+
+    /**
+    * Database TCP port
+    *
+    * @var int $db_port
+    */
     protected $db_port;
 
+    /**
+    * Connection status
+    *
+    * @var bool $status
+    */
     protected $status = false;
+
+    /**
+    * PDOStatement of last query
+    *
+    * @var \PDOStatement $last
+    */
     protected $last;
+
+    /**
+    * PDOException of last query
+    *
+    * @var \PDOException $error
+    */
     protected $error;
 
+    /**
+    * Constructor
+    *
+    * @param string $host
+    * @param string $user
+    * @param string $pass
+    * @param string $db
+    * @param int $port
+    */
     public function __construct($host = null, $user = null, $pass = null, $db = null, $port = 3306)
     {
         if ($host != null && $user != null && $pass != null && $db != null && $port != null) {
@@ -75,11 +138,16 @@ class Database
         }
     }
 
+    /**
+    * Connect to database
+    *
+    * @return false|\PDO
+    */
     protected function connect()
     {
         try {
             $this->pdo = new \PDO(
-                'mysql:host='.$this->db_host.';dbname='.$this->db_name.';charset=utf8',
+                'mysql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';charset=utf8',
                 $this->db_user,
                 $this->db_pass
             );
@@ -93,11 +161,23 @@ class Database
         }
     }
 
+    /**
+    * Return PDO object
+    *
+    * @return \PDO
+    */
     public function pdo()
     {
         return $this->pdo;
     }
 
+    /**
+    * Execute query, optionally fetch result
+    *
+    * @param string $query
+    * @param bool $fetch
+    * @return \PDOStatement
+    */
     public function query($query, $fetch = true)
     {
         try {
@@ -127,6 +207,12 @@ class Database
         return $result;
     }
 
+    /**
+    * Execute SQL statement
+    *
+    * @param string $query
+    * @return \PDOStatement
+    */
     public function exec($query)
     {
         try {
@@ -137,16 +223,33 @@ class Database
         return $this->last;
     }
 
+    /**
+    * Return number of rows from last query
+    *
+    * @return int
+    */
     public function getNumRows()
     {
         return $this->last->rowCount();
     }
 
+    /**
+    * Quote a string
+    *
+    * @param string $value
+    * @return string
+    */
     public function quote($value)
     {
         return $this->pdo()->quote($value);
     }
 
+    /**
+    * Convert null and (string)null to (string)null or quote string
+    *
+    * @param string $value
+    * @return string
+    */
     public function quoteOrNull($value)
     {
         if (is_null($value) || $value == 'null') {
@@ -156,6 +259,12 @@ class Database
         }
     }
 
+    /**
+    * Convert null to (string)null or quote string
+    *
+    * @param string $value
+    * @return string
+    */
     public function nullToNull($value)
     {
         if (is_null($value)) {
@@ -165,6 +274,12 @@ class Database
         }
     }
 
+    /**
+    * Check if table exists in database
+    *
+    * @param string $table
+    * @return \PDOStatement
+    */
     public function tableExists($table)
     {
         try {
@@ -175,22 +290,46 @@ class Database
         return $this->last;
     }
 
+    /**
+    * Get connection status
+    *
+    * @return bool
+    */
     public function getStatus()
     {
         return $this->status;
     }
 
+    /**
+    * Get message from PDOException and throw Exception
+    *
+    * @param \PDOException $e
+    * @throsw \Exception
+    */
     protected function error(\PDOException $e)
     {
         throw new \Exception('SQL error: ' . $e->getMessage());
     }
 
+    /**
+    * Get configuration property
+    *
+    * @param string $key
+    * @return string|int
+    */
     public function getConf($key)
     {
         $result = $this->query("SELECT `value` FROM `config` WHERE `key` = ". $this->quote($key));
         return $result[0]['value'];
     }
 
+    /**
+    * Set configuration property
+    *
+    * @param string $key
+    * @param string|int $value
+    * @return string|int
+    */
     public function setConf($key, $value)
     {
         $query = "UPDATE `config` SET `value` = " . $this->quote($value) . " WHERE `key` = ". $this->quote($key);

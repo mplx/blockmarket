@@ -10,14 +10,44 @@ namespace mplx\blockmarket\Util\ImportExport;
 
 use mplx\blockmarket\Service\Database;
 
+/**
+* Basic stock data export
+*/
 class Export
 {
+    /**
+    * Database connection
+    *
+    * @var \mplx\blockmarket\Service\Database
+    */
     protected $db;
 
+    /**
+    * Export filename: stocks
+    *
+    * @var string
+    */
     protected $file_stocks;
+
+    /**
+    * Export filename: receipts
+    *
+    * @var string
+    */
     protected $file_receipts;
+
+    /**
+    * Export filename: export meta data
+    *
+    * @var string
+    */
     protected $file_export;
 
+    /**
+    * Constructor
+    *
+    * @param \mplx\blockmarket\Service\Database $db
+    */
     public function __construct(Database $db)
     {
         $this->db = $db;
@@ -27,6 +57,12 @@ class Export
         $this->file_receipts = 'receipts.json';
     }
 
+    /**
+    * Export data (JSON)
+    *
+    * @param string $path
+    * @return true
+    */
     public function run($path)
     {
         if (! $this->db->getStatus()) {
